@@ -226,29 +226,34 @@ export async function speak(text: string, language: Language, onEnd?: () => void
   stopSpeaking();
   const cleanedText = cleanTextForSpeech(text, language);
 
-  // 1. Try high-definition Neural TTS from backend API
-  try {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-    const audioUrl = `${backendUrl}/api/voice/tts?text=${encodeURIComponent(cleanedText)}&language=${language}`;
+  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+  const customBackend = process.env.NEXT_PUBLIC_API_URL;
 
-    const audio = new Audio(audioUrl);
-    currentAudio = audio;
+  // 1. Try high-definition Neural TTS from backend API if available and safe from mixed-content
+  if (customBackend || !isHttps) {
+    try {
+      const backendUrl = customBackend || "http://localhost:8000";
+      const audioUrl = `${backendUrl}/api/voice/tts?text=${encodeURIComponent(cleanedText)}&language=${language}`;
 
-    audio.onended = () => {
-      currentAudio = null;
-      onEnd?.();
-    };
+      const audio = new Audio(audioUrl);
+      currentAudio = audio;
 
-    audio.onerror = () => {
-      currentAudio = null;
-      // Fallback to browser synthesis
-      fallbackBrowserSpeak(cleanedText, language, onEnd);
-    };
+      audio.onended = () => {
+        currentAudio = null;
+        onEnd?.();
+      };
 
-    await audio.play();
-    return;
-  } catch (err) {
-    console.warn("[TTS] Backend streaming notice, using browser fallback:", err);
+      audio.onerror = () => {
+        currentAudio = null;
+        // Fallback to browser synthesis
+        fallbackBrowserSpeak(cleanedText, language, onEnd);
+      };
+
+      await audio.play();
+      return;
+    } catch (err) {
+      console.warn("[TTS] Backend streaming notice, using browser fallback:", err);
+    }
   }
 
   // 2. Fallback to browser SpeechSynthesis
@@ -260,6 +265,14 @@ function fallbackBrowserSpeak(cleanedText: string, language: Language, onEnd?: (
     onEnd?.();
     return;
   }
+
+  let ended = false;
+  const finish = () => {
+    if (!ended) {
+      ended = true;
+      onEnd?.();
+    }
+  };
 
   try {
     window.speechSynthesis.cancel();
@@ -286,12 +299,16 @@ function fallbackBrowserSpeak(cleanedText: string, language: Language, onEnd?: (
       utterance.voice = voice;
     }
 
-    utterance.onend = () => onEnd?.();
-    utterance.onerror = () => onEnd?.();
+    utterance.onend = finish;
+    utterance.onerror = finish;
+
+    // Safety timeout in case speech engine hangs or drops event
+    const estimatedDuration = Math.max(4000, Math.min(25000, cleanedText.length * 90));
+    setTimeout(finish, estimatedDuration);
 
     window.speechSynthesis.speak(utterance);
   } catch (err) {
-    onEnd?.();
+    finish();
   }
 }
 
