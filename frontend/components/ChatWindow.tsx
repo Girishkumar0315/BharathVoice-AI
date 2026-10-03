@@ -6,6 +6,7 @@ import { ChatMessage, AssistantState, Language, SourceRef } from "@/lib/types";
 import { sendChat, sendVoiceTranscript } from "@/lib/api";
 import { generateKnowledgeResponse } from "@/lib/knowledgeEngine";
 import { startListening, speak, isSpeechRecognitionSupported } from "@/lib/speech";
+import { isSupabaseConfigured, storeConversationInSupabase, storeMessageInSupabase } from "@/lib/supabase";
 import MessageBubble from "./MessageBubble";
 import ThinkingAnimation from "./ThinkingAnimation";
 import VoiceButton from "./VoiceButton";
@@ -102,6 +103,29 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
       setMessages((prev) => [...prev, assistantMessage]);
       onSourcesChange?.(result.sources || []);
       onFollowupsChange?.(result.suggested_followups || []);
+
+      // Silently sync conversation and message to Supabase cloud database if connected
+      if (isSupabaseConfigured()) {
+        const convId = result.conversation_id || conversationId || `conv-${Date.now()}`;
+        storeConversationInSupabase({
+          id: convId,
+          title: query.slice(0, 60),
+          language: result.language || language,
+        }).catch(() => {});
+        storeMessageInSupabase({
+          conversationId: convId,
+          role: "user",
+          content: query,
+          language,
+        }).catch(() => {});
+        storeMessageInSupabase({
+          conversationId: convId,
+          role: "assistant",
+          content: result.answer?.summary || "",
+          language: result.language || language,
+          sources: result.sources,
+        }).catch(() => {});
+      }
 
       setAssistantState("speaking");
       speak(result.answer?.summary || "", result.language || language, () => setAssistantState("idle"));
