@@ -38,7 +38,7 @@ const CONSTELLATION = [
 ];
 
 export default function AIOrb({ state = "idle", size = "lg" }: AIOrbProps) {
-  const px = SIZE_MAP[size];
+  const px = size === "lg" ? "min(340px, 78vw)" : size === "md" ? "min(220px, 58vw)" : "min(120px, 32vw)";
   const isActive = state !== "idle";
   const isError = state === "error";
 

@@ -167,10 +167,10 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
           <div key={m.id} className={`w-full flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}>
             <MessageBubble message={m} />
             {m.role === "assistant" && (
-              <div className="flex gap-2 mt-2.5 flex-wrap pl-11 max-w-[92%] md:max-w-[88%]">
+              <div className="flex gap-1.5 sm:gap-2 mt-2 flex-wrap pl-1 sm:pl-11 max-w-full">
                 <button
                   onClick={() => handleReadAloud(m.content, m.language)}
-                  className="text-xs text-mist hover:text-bone hover:bg-white/5 px-3 py-1.5 rounded-full border border-white/10 hover:border-saffron/30 transition-all duration-200"
+                  className="text-xs text-mist hover:text-bone hover:bg-white/5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 hover:border-saffron/30 transition-all duration-200"
                 >
                   🔊 Read Aloud
                 </button>
@@ -178,7 +178,7 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
                   <button
                     key={f}
                     onClick={() => sendMessage(f)}
-                    className="text-xs text-mist hover:text-bone hover:bg-white/5 px-3 py-1.5 rounded-full border border-white/10 hover:border-amethyst/30 transition-all duration-200"
+                    className="text-xs text-mist hover:text-bone hover:bg-white/5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 hover:border-amethyst/30 transition-all duration-200"
                   >
                     {f}
                   </button>
@@ -193,8 +193,8 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
         )}
 
         {assistantState === "error" && errorText && (
-          <div className="w-full flex justify-start pl-11 my-2">
-            <div className="glass-strong rounded-2xl px-4 py-3 border border-red-400/30 text-sm text-red-200 w-fit max-w-[85%] shadow-lg">
+          <div className="w-full flex justify-start pl-1 sm:pl-11 my-2">
+            <div className="glass-strong rounded-2xl px-4 py-3 border border-red-400/30 text-xs sm:text-sm text-red-200 w-fit max-w-[95%] sm:max-w-[85%] shadow-lg">
               {errorText}
               {lastFailedQuery.current && (
                 <button
@@ -209,20 +209,20 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
         )}
       </div>
 
-      <div className="border-t border-white/5 pt-4 mt-2">
-        <div className="flex items-center gap-3">
+      <div className="border-t border-white/5 pt-3 sm:pt-4 mt-1 sm:mt-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           <VoiceButton isListening={isListening} onStart={handleVoiceStart} onStop={handleVoiceStop} />
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
-            placeholder="Type your question in any of your languages…"
-            className="flex-1 bg-panel2 border border-white/10 rounded-full px-5 py-3 text-sm outline-none focus:border-saffron/50"
+            placeholder="Ask in your language…"
+            className="flex-1 bg-panel2 border border-white/10 rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm outline-none focus:border-saffron/50 placeholder:text-mist/70"
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={!input.trim()}
-            className="rounded-full bg-gradient-to-r from-saffron to-gulal px-5 py-3 text-sm font-medium disabled:opacity-30 hover:brightness-110 transition"
+            className="rounded-full bg-gradient-to-r from-saffron to-gulal px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold disabled:opacity-30 hover:brightness-110 active:scale-95 transition"
           >
             Send
           </button>

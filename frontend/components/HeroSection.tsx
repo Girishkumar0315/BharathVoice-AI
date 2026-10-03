@@ -113,39 +113,39 @@ export default function HeroSection() {
       <div className="container relative z-10 mx-auto px-4 lg:px-8 py-16 flex flex-col items-center text-center">
         
         {/* Track Badge */}
-        <div className="mb-8 inline-flex items-center justify-center px-6 py-2.5 rounded-full glass border border-saffron/30 shadow-[0_0_25px_rgba(255,122,61,0.2)] backdrop-blur-md relative overflow-hidden group cursor-default">
+        <div className="mb-6 sm:mb-8 inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-full glass border border-saffron/30 shadow-[0_0_25px_rgba(255,122,61,0.2)] backdrop-blur-md relative overflow-hidden group cursor-default">
           <div className="absolute inset-0 bg-gradient-to-r from-saffron/20 via-gulal/20 to-amethyst/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <span className="relative z-10 text-xs md:text-sm font-semibold tracking-wide text-bone uppercase flex items-center gap-2">
+          <span className="relative z-10 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-bone uppercase flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-saffron animate-ping" />
             Voice-First AI for Bharat in Indian Languages
           </span>
         </div>
 
         {/* Heading */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 drop-shadow-2xl">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-4 sm:mb-6 drop-shadow-2xl">
           <span className="text-gradient">
             BharathVoice AI
           </span>
         </h1>
 
         {/* Typewriter Tagline */}
-        <p className="text-xl md:text-2xl text-gray-300 mb-10 h-8 font-light flex items-center justify-center space-x-1">
+        <p className="text-base sm:text-xl md:text-2xl text-gray-300 mb-8 sm:mb-10 h-8 font-light flex items-center justify-center space-x-1 px-2">
           <span>{typedText}</span>
-          <span className="w-0.5 h-6 bg-saffron animate-pulse" />
+          <span className="w-0.5 h-5 sm:h-6 bg-saffron animate-pulse" />
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-5 mb-14">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 mb-10 sm:mb-14 w-full max-w-sm sm:max-w-none">
           <Link 
             href="/assistant"
-            className="px-8 py-4 rounded-full bg-gradient-to-r from-saffron via-gulal to-amethyst text-white font-bold text-lg shadow-[0_0_35px_rgba(255,122,61,0.45)] hover:shadow-[0_0_50px_rgba(255,122,61,0.7)] hover:scale-105 transition-all duration-300 flex items-center gap-2"
+            className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-saffron via-gulal to-amethyst text-white font-bold text-base sm:text-lg shadow-[0_0_35px_rgba(255,122,61,0.45)] hover:shadow-[0_0_50px_rgba(255,122,61,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
           >
             <span>🎙️ Talk to BharathVoice</span>
-            <span className="text-sm bg-white/20 px-2 py-0.5 rounded-full">Live</span>
+            <span className="text-xs sm:text-sm bg-white/20 px-2 py-0.5 rounded-full">Live</span>
           </Link>
           <Link 
             href="/about"
-            className="px-8 py-4 rounded-full glass text-white font-semibold text-lg border border-white/20 hover:border-saffron/50 hover:bg-white/10 hover:scale-105 transition-all duration-300"
+            className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-full glass text-white font-semibold text-base sm:text-lg border border-white/20 hover:border-saffron/50 hover:bg-white/10 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center"
           >
             About Application
           </Link>

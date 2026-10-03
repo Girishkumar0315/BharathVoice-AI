@@ -328,7 +328,7 @@ export default function LandingPage() {
                   onClick={() => setIsAuthModalOpen(false)}
                 />
 
-                <div className="relative z-10 w-full max-w-md glass-strong rounded-3xl p-6 sm:p-8 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+                <div className="relative z-10 w-full max-w-md max-h-[90dvh] overflow-y-auto glass-strong rounded-3xl p-5 sm:p-8 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
                   {/* Close button */}
                   <button
                     type="button"

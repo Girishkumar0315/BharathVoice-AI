@@ -23,6 +23,7 @@ function AssistantContent() {
   const [sources, setSources] = useState<SourceRef[]>([]);
   const [followups, setFollowups] = useState<string[]>([]);
   const [rightTab, setRightTab] = useState<"sources" | "documents" | "guide">("sources");
+  const [mobileTab, setMobileTab] = useState<"chat" | "tools">("chat");
   const [externalQuery, setExternalQuery] = useState<{ text: string; nonce: number } | null>(null);
 
   useEffect(() => {
@@ -49,10 +50,10 @@ function AssistantContent() {
 
   return (
     <div className="flex min-h-screen relative overflow-hidden bg-transparent text-bone">
-      {/* Subtle gradient mesh background behind main content area */}
+      {/* Background ambient lighting */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-amethyst/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-saffron/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-amethyst/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-saffron/10 rounded-full blur-[100px]" />
       </div>
 
       <div className="relative z-10">
@@ -60,23 +61,25 @@ function AssistantContent() {
       </div>
 
       <div className="flex-1 grid lg:grid-cols-[1fr_320px] min-h-screen relative z-10">
-        <main className="px-6 py-6 flex flex-col min-h-screen relative">
-          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-            <div className="flex items-center gap-3">
-              <Link href="/" className="md:hidden block">
+        <main className="px-3 sm:px-6 py-4 sm:py-6 flex flex-col min-h-screen relative">
+          {/* Top Header Bar */}
+          <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <Link href="/" className="md:hidden block shrink-0">
                 <BrandLogo size="sm" showText={false} />
               </Link>
-              <h1 className="font-display text-2xl font-bold bg-gradient-to-r from-bone to-mist bg-clip-text text-transparent drop-shadow-sm">
-                BharathVoice Assistant
+              <h1 className="font-display text-lg sm:text-2xl font-bold bg-gradient-to-r from-bone to-mist bg-clip-text text-transparent drop-shadow-sm truncate">
+                Voice Assistant
               </h1>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="glass px-2 py-1 rounded-full border border-white/10 shadow-inner-light">
+            
+            <div className="flex items-center gap-1.5 sm:gap-3">
+              <div className="glass px-1.5 py-0.5 rounded-full border border-white/10 shadow-inner-light">
                 <LanguageSelector value={language} onChange={setLanguage} compact />
               </div>
               <Link
                 href="/"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-white/15 text-xs font-semibold text-bone hover:border-saffron/40 hover:bg-white/5 active:scale-95 transition-all duration-300 shadow-sm"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full glass border border-white/15 text-xs font-semibold text-bone hover:border-saffron/40 hover:bg-white/5 active:scale-95 transition-all shadow-sm"
               >
                 <span>🏠</span>
                 <span className="hidden sm:inline">Home</span>
@@ -84,27 +87,90 @@ function AssistantContent() {
               <button
                 type="button"
                 onClick={logout}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-red-500/20 text-xs font-semibold text-red-200 hover:bg-red-500/10 hover:border-red-500/40 active:scale-95 transition-all duration-300 cursor-pointer shadow-sm"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full glass border border-red-500/20 text-xs font-semibold text-red-200 hover:bg-red-500/10 hover:border-red-500/40 active:scale-95 transition-all cursor-pointer shadow-sm"
               >
                 <span>🚪</span>
-                <span>Sign Out</span>
+                <span className="hidden sm:inline">Sign Out</span>
               </button>
             </div>
           </div>
-          
-          <div className="flex-1 glass-strong rounded-[2rem] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-5 min-h-[70vh] relative overflow-hidden group">
-            {/* Neon border hint on hover */}
-            <div className="absolute inset-0 rounded-[2rem] border border-transparent group-hover:border-saffron/20 transition-colors duration-700 pointer-events-none"></div>
-            
-            <ChatWindow
-              language={language}
-              externalQuery={externalQuery}
-              onSourcesChange={setSources}
-              onFollowupsChange={setFollowups}
-            />
+
+          {/* Mobile Switcher (Chat vs Tools) */}
+          <div className="flex lg:hidden gap-1 p-1 glass rounded-2xl mb-3 border border-white/10">
+            <button
+              onClick={() => setMobileTab("chat")}
+              className={`flex-1 text-xs py-2 rounded-xl font-bold transition-all duration-300 ${
+                mobileTab === "chat"
+                  ? "bg-gradient-to-r from-saffron to-gulal text-white shadow-glow"
+                  : "text-mist hover:text-bone"
+              }`}
+            >
+              💬 Chat Assistant
+            </button>
+            <button
+              onClick={() => setMobileTab("tools")}
+              className={`flex-1 text-xs py-2 rounded-xl font-bold transition-all duration-300 ${
+                mobileTab === "tools"
+                  ? "bg-gradient-to-r from-amethyst to-cyber text-white shadow-glow"
+                  : "text-mist hover:text-bone"
+              }`}
+            >
+              📚 Tools &amp; Sources {sources.length > 0 && `(${sources.length})`}
+            </button>
           </div>
+
+          {/* Main Card (Chat or Mobile Tools) */}
+          {mobileTab === "chat" ? (
+            <div className="flex-1 glass-strong rounded-2xl sm:rounded-[2rem] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-3 sm:p-5 h-[calc(100dvh-150px)] sm:min-h-[70vh] relative overflow-hidden group">
+              <div className="absolute inset-0 rounded-2xl sm:rounded-[2rem] border border-transparent group-hover:border-saffron/20 transition-colors duration-700 pointer-events-none" />
+              <ChatWindow
+                language={language}
+                externalQuery={externalQuery}
+                onSourcesChange={setSources}
+                onFollowupsChange={setFollowups}
+              />
+            </div>
+          ) : (
+            <div className="lg:hidden flex-1 glass-strong rounded-2xl border border-white/10 p-4 space-y-4 overflow-y-auto">
+              <div className="flex gap-1 p-1 glass rounded-xl border border-white/10">
+                {(["sources", "documents", "guide"] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setRightTab(tab)}
+                    className={`flex-1 text-xs py-2 rounded-lg font-semibold capitalize transition-all ${
+                      rightTab === tab
+                        ? "bg-saffron/20 text-saffron border border-saffron/40"
+                        : "text-mist hover:text-bone"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+
+              {rightTab === "sources" && (
+                <div className="space-y-3">
+                  <h3 className="font-display font-semibold text-xs text-mist">Verified Sources</h3>
+                  {sources.length === 0 ? (
+                    <p className="text-xs text-mist/60 glass p-4 rounded-xl text-center">Ask a question to view verified government sources.</p>
+                  ) : (
+                    sources.map((s) => <SourceCard key={s.doc_id} source={s} />)
+                  )}
+                </div>
+              )}
+
+              {rightTab === "documents" && <DocumentUploader />}
+              {rightTab === "guide" && (
+                <EligibilityFlow onComplete={(query) => {
+                  setExternalQuery({ text: query, nonce: Date.now() });
+                  setMobileTab("chat");
+                }} />
+              )}
+            </div>
+          )}
         </main>
 
+        {/* Desktop Right Panel */}
         <aside className="hidden lg:flex flex-col gap-5 border-l border-white/5 px-5 py-6 bg-void/40 backdrop-blur-md">
           <div className="flex gap-2 p-1 glass rounded-xl border border-white/5">
             {(["sources", "documents", "guide"] as const).map((tab) => (
@@ -126,7 +192,7 @@ function AssistantContent() {
             {rightTab === "sources" && (
               <div className="space-y-4 animate-fade-in">
                 <h3 className="font-display font-semibold text-sm text-mist flex items-center gap-2">
-                  <span className="w-1 h-4 rounded-full bg-amethyst"></span>
+                  <span className="w-1 h-4 rounded-full bg-amethyst" />
                   Source References
                 </h3>
                 {sources.length === 0 ? (
@@ -143,7 +209,7 @@ function AssistantContent() {
                 {followups.length > 0 && (
                   <div className="pt-4 mt-4 border-t border-white/5">
                     <h3 className="font-display font-semibold text-sm text-mist mb-3 flex items-center gap-2">
-                      <span className="w-1 h-4 rounded-full bg-saffron"></span>
+                      <span className="w-1 h-4 rounded-full bg-saffron" />
                       Suggested Follow-ups
                     </h3>
                     <div className="flex flex-col gap-2">
@@ -177,25 +243,26 @@ function AssistantContent() {
         </aside>
       </div>
 
+      {/* Language Onboarding Modal (Responsive) */}
       {showOnboarding && (
-        <div className="fixed inset-0 z-[100] bg-void/80 backdrop-blur-xl flex items-center justify-center px-6 transition-all duration-500">
-          <div className="glass-neon rounded-3xl p-8 max-w-md w-full text-center border border-saffron/30 shadow-[0_0_50px_rgba(255,153,51,0.15)] animate-scaleIn">
-            <div className="relative w-16 h-16 mx-auto mb-6">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-saffron via-gulal to-amethyst animate-spinSlow opacity-70 blur-md"></div>
+        <div className="fixed inset-0 z-[100] bg-void/85 backdrop-blur-xl flex items-center justify-center p-4 transition-all duration-500">
+          <div className="glass-neon rounded-2xl sm:rounded-3xl p-6 sm:p-8 max-w-sm sm:max-w-md w-full text-center border border-saffron/30 shadow-[0_0_50px_rgba(255,122,61,0.2)] animate-scaleIn">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-saffron via-gulal to-amethyst animate-spinSlow opacity-70 blur-md" />
               <div className="relative w-full h-full rounded-full bg-gradient-to-br from-saffron via-gulal to-amethyst border-2 border-void flex items-center justify-center shadow-glow">
                 <span className="text-xl text-void font-bold">🗣️</span>
               </div>
             </div>
             
-            <h2 className="font-display text-2xl font-bold mb-3 text-bone">Choose your language</h2>
-            <p className="text-sm text-mist/90 mb-8 font-medium">BharathVoice will speak, listen and respond in your language.</p>
+            <h2 className="font-display text-xl sm:text-2xl font-bold mb-2 text-bone">Choose your language</h2>
+            <p className="text-xs sm:text-sm text-mist/90 mb-6 font-medium">BharathVoice will speak, listen and respond in your language.</p>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
               {(["en", "hi", "te", "kn"] as Language[]).map((lang) => (
                 <button
                   key={lang}
                   onClick={() => completeOnboarding(lang)}
-                  className="glass-strong rounded-2xl py-3.5 px-3 text-sm font-semibold border border-white/10 hover:border-saffron hover:bg-saffron/10 hover:shadow-[0_0_20px_rgba(255,153,51,0.2)] transition-all duration-300 transform hover:-translate-y-1"
+                  className="glass-strong rounded-xl sm:rounded-2xl py-3 sm:py-3.5 px-3 text-xs sm:text-sm font-semibold border border-white/10 hover:border-saffron hover:bg-saffron/10 hover:shadow-[0_0_20px_rgba(255,122,61,0.2)] active:scale-95 transition-all duration-300"
                 >
                   {{ en: "English", hi: "हिन्दी", te: "తెలుగు", kn: "ಕನ್ನಡ" }[lang]}
                 </button>
@@ -212,10 +279,10 @@ export default function AssistantPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-void text-bone flex items-center justify-center">
+        <div className="min-h-screen bg-void text-bone flex items-center justify-center p-4">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full border-2 border-saffron border-t-transparent animate-spin"></div>
-            <p className="text-sm font-medium text-mist">Loading BharathVoice Assistant...</p>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-saffron border-t-transparent animate-spin" />
+            <p className="text-xs sm:text-sm font-medium text-mist">Loading BharathVoice Assistant...</p>
           </div>
         </div>
       }
