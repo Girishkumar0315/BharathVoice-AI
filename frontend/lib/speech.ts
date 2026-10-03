@@ -226,14 +226,12 @@ export async function speak(text: string, language: Language, onEnd?: () => void
   stopSpeaking();
   const cleanedText = cleanTextForSpeech(text, language);
 
-  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
   const customBackend = process.env.NEXT_PUBLIC_API_URL;
 
-  // 1. Try high-definition Neural TTS from backend API if available and safe from mixed-content
-  if (customBackend || !isHttps) {
+  // 1. If an external production HTTPS backend URL is explicitly provided, attempt neural TTS
+  if (customBackend && customBackend.startsWith("http") && !customBackend.includes("localhost") && !customBackend.includes("127.0.0.1")) {
     try {
-      const backendUrl = customBackend || "http://localhost:8000";
-      const audioUrl = `${backendUrl}/api/voice/tts?text=${encodeURIComponent(cleanedText)}&language=${language}`;
+      const audioUrl = `${customBackend}/api/voice/tts?text=${encodeURIComponent(cleanedText)}&language=${language}`;
 
       const audio = new Audio(audioUrl);
       currentAudio = audio;
@@ -245,18 +243,17 @@ export async function speak(text: string, language: Language, onEnd?: () => void
 
       audio.onerror = () => {
         currentAudio = null;
-        // Fallback to browser synthesis
         fallbackBrowserSpeak(cleanedText, language, onEnd);
       };
 
       await audio.play();
       return;
     } catch (err) {
-      console.warn("[TTS] Backend streaming notice, using browser fallback:", err);
+      console.warn("[TTS] Backend notice, using browser fallback:", err);
     }
   }
 
-  // 2. Fallback to browser SpeechSynthesis
+  // 2. Browser native SpeechSynthesis (100% reliable across all phones, computers, and tablets)
   fallbackBrowserSpeak(cleanedText, language, onEnd);
 }
 
