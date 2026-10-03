@@ -17,12 +17,12 @@ export async function POST(req: NextRequest) {
     const trimmedText = text.trim();
     const lang = (language as Language) || "en";
 
-    // 1. Attempt proxy to external backend if configured
-    const backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL;
-    if (backendUrl) {
+    // 1. If an external Python backend is explicitly set, attempt to proxy
+    const backendUrl = process.env.BACKEND_URL;
+    if (backendUrl && !backendUrl.includes("localhost")) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
         const res = await fetch(`${backendUrl}/api/voice`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
           const data = await res.json();
           return NextResponse.json(data);
         }
-      } catch (proxyErr) {
+      } catch {
         // Fall back gracefully to built-in knowledge engine
       }
     }

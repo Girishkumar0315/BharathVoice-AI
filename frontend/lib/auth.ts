@@ -192,8 +192,19 @@ export function logoutUser() {
   try {
     sessionStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem("bharathvoice_user_id");
+    sessionStorage.clear();
   } catch {}
-  window.dispatchEvent(new Event("auth-changed"));
+  try {
+    window.dispatchEvent(new Event("auth-changed"));
+  } catch {}
+
+  // Instant redirect or reload so user exits authenticated state immediately
+  if (window.location.pathname === "/") {
+    window.location.reload();
+  } else {
+    window.location.assign("/");
+  }
 }
 
 export function useAuth() {

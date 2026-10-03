@@ -16,12 +16,12 @@ export async function POST(req: NextRequest) {
     const trimmedQuery = query.trim();
     const lang = (language as Language) || "en";
 
-    // 1. If an external Python backend is configured, attempt to proxy first
-    const backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL;
-    if (backendUrl) {
+    // 1. If an external Python backend is explicitly set (e.g. on Render/Railway), attempt to proxy
+    const backendUrl = process.env.BACKEND_URL;
+    if (backendUrl && !backendUrl.includes("localhost")) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
         const res = await fetch(`${backendUrl}/api/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -34,12 +34,12 @@ export async function POST(req: NextRequest) {
           const data = await res.json();
           return NextResponse.json(data);
         }
-      } catch (proxyErr) {
+      } catch {
         // Fall back gracefully to built-in knowledge engine
       }
     }
 
-    // 2. Built-in Next.js Grounded RAG Knowledge Engine
+    // 2. Built-in Next.js Grounded RAG Knowledge Engine (zero latency, works for everyone)
     const result = generateKnowledgeResponse(trimmedQuery, lang, conversation_id);
 
     return NextResponse.json(result);

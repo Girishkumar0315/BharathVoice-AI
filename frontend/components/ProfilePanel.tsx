@@ -4,13 +4,6 @@ import { useEffect, useState } from "react";
 import { Language } from "@/lib/types";
 import LanguageSelector from "./LanguageSelector";
 import { saveProfile } from "@/lib/api";
-import {
-  getSupabaseCredentials,
-  saveSupabaseCredentials,
-  isSupabaseConfigured,
-  testSupabaseConnection,
-  storeProfileInSupabase,
-} from "@/lib/supabase";
 
 const STATES = ["Andhra Pradesh", "Telangana", "Karnataka", "Maharashtra", "Tamil Nadu", "Delhi", "Other"];
 const EDUCATION = ["School (9-12)", "Intermediate/Diploma", "Undergraduate", "Postgraduate", "Not applicable"];
@@ -26,21 +19,9 @@ export default function ProfilePanel() {
   const [userId, setUserId] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
-  // Supabase Configuration State
-  const [supabaseUrl, setSupabaseUrl] = useState("");
-  const [supabaseKey, setSupabaseKey] = useState("");
-  const [supabaseConnected, setSupabaseConnected] = useState(false);
-  const [supabaseTesting, setSupabaseTesting] = useState(false);
-  const [supabaseMsg, setSupabaseMsg] = useState("");
-
   useEffect(() => {
     const stored = localStorage.getItem("bharathvoice_user_id");
     if (stored) setUserId(stored);
-
-    const creds = getSupabaseCredentials();
-    setSupabaseUrl(creds.url);
-    setSupabaseKey(creds.anonKey);
-    setSupabaseConnected(isSupabaseConfigured());
   }, []);
 
   function toggleInterest(interest: string) {
@@ -61,36 +42,14 @@ export default function ProfilePanel() {
         occupation,
         interests,
       });
-      localStorage.setItem("bharathvoice_user_id", res.user_id);
-      setUserId(res.user_id);
-
-      // Also sync to Supabase cloud storage if configured
-      if (isSupabaseConfigured()) {
-        await storeProfileInSupabase({
-          userId: res.user_id,
-          name,
-          language,
-          state,
-          education,
-          occupation,
-          interests,
-        });
+      if (res && res.user_id) {
+        localStorage.setItem("bharathvoice_user_id", res.user_id);
+        setUserId(res.user_id);
       }
-
       setStatus("saved");
     } catch {
       setStatus("error");
     }
-  }
-
-  async function handleTestSupabase() {
-    setSupabaseTesting(true);
-    setSupabaseMsg("");
-    saveSupabaseCredentials(supabaseUrl, supabaseKey);
-    const result = await testSupabaseConnection();
-    setSupabaseTesting(false);
-    setSupabaseConnected(result.success);
-    setSupabaseMsg(result.message);
   }
 
   return (
@@ -156,76 +115,8 @@ export default function ProfilePanel() {
           >
             {status === "saving" ? "Saving Profile…" : "Save Profile →"}
           </button>
-          {status === "saved" && <span className="text-xs text-cyber font-medium">✓ Profile saved &amp; synced successfully!</span>}
+          {status === "saved" && <span className="text-xs text-cyber font-medium">✓ Profile saved successfully!</span>}
           {status === "error" && <span className="text-xs text-red-300">Could not save right now. Please try again.</span>}
-        </div>
-      </div>
-
-      {/* Supabase Database Cloud Storage Integration */}
-      <div className="glass-strong rounded-2xl p-6 border border-emerald-500/25 relative overflow-hidden pt-6">
-        <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-base shadow-sm">
-              ⚡
-            </div>
-            <div>
-              <h3 className="font-display font-bold text-base text-bone flex items-center gap-2">
-                <span>Supabase Cloud Database</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                  supabaseConnected ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "bg-white/10 text-mist"
-                }`}>
-                  {supabaseConnected ? "Connected ✓" : "Configurable"}
-                </span>
-              </h3>
-              <p className="text-[11px] text-mist/80">
-                Store citizen sessions, conversations, and verified schemes directly in your Supabase PostgreSQL cloud database.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="text-[11px] font-semibold text-mist block mb-1.5 uppercase tracking-wider">
-              Supabase Project URL
-            </label>
-            <input
-              type="text"
-              value={supabaseUrl}
-              onChange={(e) => setSupabaseUrl(e.target.value)}
-              placeholder="https://xyzcompany.supabase.co"
-              className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-bone outline-none focus:border-emerald-500/50 transition-colors font-mono"
-            />
-          </div>
-
-          <div>
-            <label className="text-[11px] font-semibold text-mist block mb-1.5 uppercase tracking-wider">
-              Supabase Public Anon Key
-            </label>
-            <input
-              type="password"
-              value={supabaseKey}
-              onChange={(e) => setSupabaseKey(e.target.value)}
-              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-              className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-bone outline-none focus:border-emerald-500/50 transition-colors font-mono"
-            />
-          </div>
-
-          <div className="flex items-center gap-3 pt-1">
-            <button
-              type="button"
-              onClick={handleTestSupabase}
-              disabled={supabaseTesting}
-              className="px-5 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all active:scale-95 cursor-pointer disabled:opacity-50"
-            >
-              {supabaseTesting ? "Testing Connection…" : "Test & Save Connection"}
-            </button>
-            {supabaseMsg && (
-              <span className={`text-xs ${supabaseConnected ? "text-emerald-400" : "text-amber-300"}`}>
-                {supabaseMsg}
-              </span>
-            )}
-          </div>
         </div>
       </div>
     </div>
