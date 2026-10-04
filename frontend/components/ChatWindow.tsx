@@ -89,6 +89,11 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
         result = generateKnowledgeResponse(query, language, conversationId);
       }
 
+      // Guarantee valid structured answer
+      if (!result || !result.answer) {
+        result = generateKnowledgeResponse(query, language, conversationId);
+      }
+
       setAssistantState("generating");
       setConversationId(result.conversation_id);
       const assistantMessage: ChatMessage = {
@@ -106,25 +111,29 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
 
       // Silently sync conversation and message to Supabase cloud database if connected
       if (isSupabaseConfigured()) {
-        const convId = result.conversation_id || conversationId || `conv-${Date.now()}`;
-        storeConversationInSupabase({
-          id: convId,
-          title: query.slice(0, 60),
-          language: result.language || language,
-        }).catch(() => {});
-        storeMessageInSupabase({
-          conversationId: convId,
-          role: "user",
-          content: query,
-          language,
-        }).catch(() => {});
-        storeMessageInSupabase({
-          conversationId: convId,
-          role: "assistant",
-          content: result.answer?.summary || "",
-          language: result.language || language,
-          sources: result.sources,
-        }).catch(() => {});
+        try {
+          const convId = result.conversation_id || conversationId || `conv-${Date.now()}`;
+          storeConversationInSupabase({
+            id: convId,
+            title: query.slice(0, 60),
+            language: result.language || language,
+          }).catch(() => {});
+          storeMessageInSupabase({
+            conversationId: convId,
+            role: "user",
+            content: query,
+            language,
+          }).catch(() => {});
+          storeMessageInSupabase({
+            conversationId: convId,
+            role: "assistant",
+            content: result.answer?.summary || "",
+            language: result.language || language,
+            sources: result.sources,
+          }).catch(() => {});
+        } catch (sbErr) {
+          console.warn("[Supabase] Background sync notice:", sbErr);
+        }
       }
 
       setAssistantState("speaking");

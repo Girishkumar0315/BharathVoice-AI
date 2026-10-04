@@ -5,29 +5,42 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 const STORAGE_URL_KEY = "bharathvoice_supabase_url";
 const STORAGE_KEY_KEY = "bharathvoice_supabase_anon_key";
 
+const DEFAULT_SUPABASE_URL = "https://jqxpghqbjauypmliggiy.supabase.co";
+const DEFAULT_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxeHBnaHFiamF1eXBtbGlnZ2l5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwODkyODgsImV4cCI6MjEwNjY2NTI4OH0.2OMwE2Zak7II-pm0Uvs2rn4pGl6218jCSzi_tIOhJJ0";
+
 // Default or environment values
-const ENV_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const ENV_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const ENV_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+const ENV_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
 
 let cachedClient: SupabaseClient | null = null;
 
+function normalizeSupabaseUrl(raw: string): string {
+  if (!raw) return "";
+  let u = raw.trim();
+  // Strip trailing /rest/v1 or trailing slashes
+  u = u.replace(/\/rest\/v1\/?$/i, "").replace(/\/+$/, "");
+  return u;
+}
+
 export function getSupabaseCredentials(): { url: string; anonKey: string } {
   if (typeof window === "undefined") {
-    return { url: ENV_SUPABASE_URL, anonKey: ENV_SUPABASE_ANON_KEY };
+    return { url: normalizeSupabaseUrl(ENV_SUPABASE_URL), anonKey: ENV_SUPABASE_ANON_KEY };
   }
 
   const storedUrl = localStorage.getItem(STORAGE_URL_KEY);
   const storedKey = localStorage.getItem(STORAGE_KEY_KEY);
 
-  const url = storedUrl || ENV_SUPABASE_URL;
-  const anonKey = storedKey || ENV_SUPABASE_ANON_KEY;
+  const rawUrl = storedUrl || ENV_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+  const anonKey = storedKey || ENV_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
 
-  return { url, anonKey };
+  return { url: normalizeSupabaseUrl(rawUrl), anonKey: anonKey.trim() };
 }
 
 export function saveSupabaseCredentials(url: string, anonKey: string) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_URL_KEY, url.trim());
+  const normalized = normalizeSupabaseUrl(url);
+  localStorage.setItem(STORAGE_URL_KEY, normalized);
   localStorage.setItem(STORAGE_KEY_KEY, anonKey.trim());
   cachedClient = null; // reset client cache
   window.dispatchEvent(new Event("supabase-config-changed"));
