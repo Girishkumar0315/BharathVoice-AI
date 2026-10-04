@@ -267,14 +267,13 @@ export default function LandingPage() {
                             type="button"
                             onClick={() => {
                               setLanguage(l.code);
-                              speak(t.heroSpeakingGreeting, l.code);
                             }}
                             className={`px-3.5 py-2 rounded-xl text-center border transition-all cursor-pointer active:scale-95 flex items-center gap-2 ${
                               isActive
                                 ? "bg-gradient-to-r from-saffron/30 via-gulal/20 to-amethyst/30 border-saffron text-bone shadow-glow scale-105"
                                 : "glass border-white/10 hover:border-saffron/40 hover:bg-white/10 text-mist hover:text-bone"
                             }`}
-                            title={`Switch website to ${l.label} and speak`}
+                            title={`Switch website to ${l.label}`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-saffron animate-pulse" : "bg-white/30"}`} />
                             <span className="text-xs font-bold text-bone">{l.native}</span>

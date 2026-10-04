@@ -286,35 +286,37 @@ export async function speak(text: string, language: Language, onEnd?: () => void
   stopSpeaking();
   const cleanedText = cleanTextForSpeech(text, language);
 
-  const customBackend = process.env.NEXT_PUBLIC_API_URL;
+  let ended = false;
+  const finish = () => {
+    if (!ended) {
+      ended = true;
+      currentAudio = null;
+      onEnd?.();
+    }
+  };
 
-  // 1. If an external production HTTPS backend URL is explicitly provided, attempt neural TTS
-  if (customBackend && customBackend.startsWith("http") && !customBackend.includes("localhost") && !customBackend.includes("127.0.0.1")) {
+  // 1. Primary: Studio-grade Gemini/Google Neural TTS (/api/voice/tts)
+  if (typeof window !== "undefined") {
     try {
-      const audioUrl = `${customBackend}/api/voice/tts?text=${encodeURIComponent(cleanedText)}&language=${language}`;
-
+      const audioUrl = `/api/voice/tts?text=${encodeURIComponent(cleanedText)}&language=${encodeURIComponent(language)}`;
       const audio = new Audio(audioUrl);
       currentAudio = audio;
 
-      audio.onended = () => {
-        currentAudio = null;
-        onEnd?.();
-      };
-
+      audio.onended = finish;
       audio.onerror = () => {
         currentAudio = null;
-        fallbackBrowserSpeak(cleanedText, language, onEnd);
+        fallbackBrowserSpeak(cleanedText, language, finish);
       };
 
       await audio.play();
       return;
     } catch (err) {
-      console.warn("[TTS] Backend notice, using browser fallback:", err);
+      console.warn("[TTS] Neural stream notice, using browser fallback:", err);
     }
   }
 
-  // 2. Browser native SpeechSynthesis (100% reliable across all phones, computers, and tablets)
-  fallbackBrowserSpeak(cleanedText, language, onEnd);
+  // 2. Fallback: Browser native SpeechSynthesis
+  fallbackBrowserSpeak(cleanedText, language, finish);
 }
 
 function fallbackBrowserSpeak(cleanedText: string, language: Language, onEnd?: () => void) {

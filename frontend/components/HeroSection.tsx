@@ -32,12 +32,18 @@ export default function HeroSection() {
     return () => clearInterval(typingInterval);
   }, [fullText]);
 
-  const handleLanguageSelect = (langCode: Language, nativeName: string) => {
+  const handleLanguageSelect = (langCode: Language) => {
+    stopSpeaking();
+    setLanguage(langCode);
+    setOrbState("idle");
+    setStatusMessage("");
+  };
+
+  const handlePlayPronunciation = (langCode: Language, label: string) => {
     stopSpeaking();
     setLanguage(langCode);
     setOrbState("speaking");
-    setStatusMessage(`Switched to ${nativeName}. Speaking in natural voice...`);
-
+    setStatusMessage(`Playing natural ${label} voice preview...`);
     const greeting = t.heroSpeakingGreeting || "Namaste! Welcome to BharathVoice AI.";
     speak(greeting, langCode, () => {
       setOrbState("idle");
@@ -198,7 +204,7 @@ export default function HeroSection() {
                 <button 
                   key={lang.code}
                   type="button"
-                  onClick={() => handleLanguageSelect(lang.code, lang.native)}
+                  onClick={() => handleLanguageSelect(lang.code)}
                   className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 cursor-pointer active:scale-95 ${
                     isActive
                       ? "bg-gradient-to-r from-saffron/30 via-gulal/25 to-amethyst/30 border-saffron text-bone shadow-[0_0_25px_rgba(255,122,61,0.4)] scale-105 border-2"
@@ -320,7 +326,7 @@ export default function HeroSection() {
                 ].map((item) => (
                   <button
                     key={item.code}
-                    onClick={() => handleLanguageSelect(item.code, item.label)}
+                    onClick={() => handlePlayPronunciation(item.code, item.label)}
                     className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-semibold glass border transition-all flex items-center gap-1.5 shadow-sm active:scale-95 ${
                       language === item.code
                         ? "border-saffron bg-saffron/20 text-white shadow-glow"
