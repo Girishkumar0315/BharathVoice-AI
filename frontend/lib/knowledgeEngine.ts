@@ -145,23 +145,33 @@ const INTENT_PATTERNS = {
 };
 
 export function detectUserIntent(query: string): UserIntent {
-  const q = query.toLowerCase();
+  const q = query.trim().toLowerCase();
+  const tokens = q.split(/[\s,?.!;:()\[\]{}]+/).filter(Boolean);
 
   // Check specific functional intents first
   for (const word of INTENT_PATTERNS.ELIGIBILITY) {
-    if (q.includes(word.toLowerCase())) return "ELIGIBILITY";
+    const w = word.toLowerCase();
+    if (w.length <= 3 ? tokens.includes(w) : q.includes(w)) return "ELIGIBILITY";
   }
   for (const word of INTENT_PATTERNS.DOCUMENTS) {
-    if (q.includes(word.toLowerCase())) return "DOCUMENTS";
+    const w = word.toLowerCase();
+    if (w.length <= 3 ? tokens.includes(w) : q.includes(w)) return "DOCUMENTS";
   }
   for (const word of INTENT_PATTERNS.APPLICATION_STEPS) {
-    if (q.includes(word.toLowerCase())) return "APPLICATION_STEPS";
+    const w = word.toLowerCase();
+    if (w.length <= 3 ? tokens.includes(w) : q.includes(w)) return "APPLICATION_STEPS";
   }
   for (const word of INTENT_PATTERNS.BENEFITS) {
-    if (q.includes(word.toLowerCase())) return "BENEFITS";
+    const w = word.toLowerCase();
+    if (w.length <= 3 ? tokens.includes(w) : q.includes(w)) return "BENEFITS";
   }
   for (const word of INTENT_PATTERNS.GREETING) {
-    if (q.includes(word.toLowerCase()) || q === word.toLowerCase()) return "GREETING";
+    const w = word.toLowerCase();
+    if (w.length <= 4) {
+      if (tokens.includes(w) && tokens.length <= 3) return "GREETING";
+    } else {
+      if (q.includes(w) && (tokens.length <= 6 || q.startsWith(w))) return "GREETING";
+    }
   }
 
   return "GENERAL_SCHEME";
@@ -465,10 +475,15 @@ export function generateKnowledgeResponse(
     ? requestedLanguage
     : (detectedScript || requestedLanguage || "en");
 
+  // 1. Search Grounded Schemes first
+  const searchResults = searchSchemes(query, 4);
+  const top = searchResults[0];
+  const grounded = top && top.score > 0;
+
   const intent = detectUserIntent(query);
 
-  // 1. Handle Greeting Intent
-  if (intent === "GREETING") {
+  // 2. Handle Greeting Intent ONLY if user is greeting or no scheme was specifically queried
+  if (intent === "GREETING" && (!grounded || top.score < 20)) {
     const greeting = GREETING_RESPONSES[language] || GREETING_RESPONSES.en;
     return {
       conversation_id: conversationId || `conv-${Date.now()}`,
@@ -498,11 +513,6 @@ export function generateKnowledgeResponse(
       suggested_followups: greeting.followups,
     };
   }
-
-  // 2. Search Grounded Schemes
-  const searchResults = searchSchemes(query, 4);
-  const top = searchResults[0];
-  const grounded = top && top.score > 0;
 
   if (!grounded) {
     const msg = NO_SOURCE_MSGS[language] || NO_SOURCE_MSGS.en;
