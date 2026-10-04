@@ -4,6 +4,16 @@ import { CategoryItem } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 const CATEGORY_META: Record<string, { icon: string; description: string }> = {
   Education: { icon: "🎓", description: "Schools, higher education and student support programs." },
   Agriculture: { icon: "🌾", description: "Farmer income support, insurance and input subsidies." },
@@ -29,5 +39,5 @@ export async function GET() {
     doc_count: counts[name] || 0,
   }));
 
-  return NextResponse.json(items);
+  return NextResponse.json(items, { headers: CORS_HEADERS });
 }
