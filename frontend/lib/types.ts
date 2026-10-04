@@ -22,6 +22,7 @@ export interface SourceRef {
 }
 
 export interface StructuredAnswer {
+  scheme_id?: string;
   scheme_name?: string;
   summary: string;
   eligibility: string[];

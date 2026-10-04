@@ -1,4 +1,5 @@
 import { ALL_SCHEMES, SCHEME_TRANSLATIONS, SchemeRecord } from "./knowledgeData";
+import { getLocalizedScheme } from "./schemeLocalization";
 import { ChatResponse, Language, SourceRef, StructuredAnswer } from "./types";
 
 const SCRIPT_RANGES: Record<Language, [number, number]> = {
@@ -457,7 +458,13 @@ export function generateKnowledgeResponse(
   requestedLanguage: Language,
   conversationId?: string
 ): ChatResponse {
-  const language = detectLanguage(query, requestedLanguage);
+  // If the user actively picked a language in the selector, honor that selected language!
+  // Otherwise detect native Indian script if present in the text.
+  const detectedScript = detectLanguage(query, requestedLanguage);
+  const language: Language = requestedLanguage && requestedLanguage !== "en"
+    ? requestedLanguage
+    : (detectedScript || requestedLanguage || "en");
+
   const intent = detectUserIntent(query);
 
   // 1. Handle Greeting Intent
@@ -467,6 +474,7 @@ export function generateKnowledgeResponse(
       conversation_id: conversationId || `conv-${Date.now()}`,
       message_id: `msg-${Date.now()}`,
       answer: {
+        scheme_id: "gov-portal-01",
         scheme_name: "BharathVoice AI Citizen Assistant",
         summary: greeting.summary,
         eligibility: ["All Indian Citizens", "Students, Farmers, Workers & Families across India"],
@@ -524,20 +532,31 @@ export function generateKnowledgeResponse(
   let documentsList = topScheme.documents_required || [];
   let stepsList = topScheme.application_process || [];
 
-  // Check translated cache if present
-  const translationsForLang = SCHEME_TRANSLATIONS[language];
-  if (language !== "en" && translationsForLang && translationsForLang[topScheme.id]) {
-    const t = translationsForLang[topScheme.id];
-    schemeTitle = t.title || schemeTitle;
-    schemeSummary = t.summary || schemeSummary;
-    eligibilityList = t.eligibility || eligibilityList;
-    benefitsList = t.benefits || benefitsList;
-    documentsList = t.documents_required || documentsList;
-    stepsList = t.application_process || stepsList;
+  // Check comprehensive localized data in selected language first
+  const loc = getLocalizedScheme(topScheme.id, language);
+  if (loc) {
+    schemeTitle = loc.title;
+    schemeSummary = loc.summary;
+    eligibilityList = loc.eligibility;
+    benefitsList = loc.benefits;
+    documentsList = loc.documents_required;
+    stepsList = loc.application_steps;
+  } else {
+    // Check fallback translated cache
+    const translationsForLang = SCHEME_TRANSLATIONS[language];
+    if (language !== "en" && translationsForLang && translationsForLang[topScheme.id]) {
+      const t = translationsForLang[topScheme.id];
+      schemeTitle = t.title || schemeTitle;
+      schemeSummary = t.summary || schemeSummary;
+      eligibilityList = t.eligibility || eligibilityList;
+      benefitsList = t.benefits || benefitsList;
+      documentsList = t.documents_required || documentsList;
+      stepsList = t.application_process || stepsList;
+    }
   }
 
   // 3. User Intention Tuning:
-  // Dynamically tailor the lead summary to address the citizen's specific intent directly
+  // Dynamically tailor the lead summary to address the citizen's specific intent directly in their chosen language
   let intentionalSummary = schemeSummary;
 
   if (intent === "ELIGIBILITY") {
@@ -550,6 +569,18 @@ export function generateKnowledgeResponse(
       intentionalSummary = `ಅರ್ಹತೆಯ ವಿವರ: ${schemeTitle} ಯೋಜನೆಗೆ ಮುಖ್ಯ ಅರ್ಹತೆಗಳು: ${eligPoints}. ನೀವು ಈ ಷರತ್ತುಗಳನ್ನು ಪೂರೈಸಿದರೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಬಹುದು.`;
     } else if (language === "ta") {
       intentionalSummary = `தகுதி விவரங்கள்: ${schemeTitle} திட்டத்திற்கான முக்கிய தகுதிகள்: ${eligPoints}. இந்த தகுதிகள் இருந்தால் நீங்கள் விண்ணப்பிக்கலாம்.`;
+    } else if (language === "mr") {
+      intentionalSummary = `पात्रतेची माहिती: ${schemeTitle} साठी मुख्य पात्रता अटी: ${eligPoints}. आपण या अटी पूर्ण केल्यास अर्ज करू शकता.`;
+    } else if (language === "bn") {
+      intentionalSummary = `যোগ্যতার তথ্য: ${schemeTitle} প্রকল্পের জন্য প্রধান যোগ্যতার শর্ত: ${eligPoints}। আপনি এই শর্ত পূরণ করলে আবেদন করতে পারেন।`;
+    } else if (language === "gu") {
+      intentionalSummary = `પાત્રતાની વિગતો: ${schemeTitle} માટે મુખ્ય પાત્રતા નિયમો: ${eligPoints}. જો તમે આ શરતો પૂરી કરો છો તો અરજી કરી શકો છો.`;
+    } else if (language === "ml") {
+      intentionalSummary = `അർഹതാ വിവരങ്ങൾ: ${schemeTitle} പദ്ധതിയുടെ പ്രധാന അർഹതാ മാനദണ്ഡങ്ങൾ: ${eligPoints}. ഈ യോഗ്യതകൾ ഉണ്ടെങ്കിൽ നിങ്ങൾക്ക് അപേക്ഷിക്കാം.`;
+    } else if (language === "pa") {
+      intentionalSummary = `ਯੋਗਤਾ ਦੇ ਵੇਰਵੇ: ${schemeTitle} ਲਈ ਮੁੱਖ ਯੋਗਤਾ ਸ਼ਰਤਾਂ: ${eligPoints}। ਜੇਕਰ ਤੁਸੀਂ ਇਹ ਸ਼ਰਤਾਂ ਪੂਰੀਆਂ ਕਰਦੇ ਹੋ ਤਾਂ ਅਰਜ਼ੀ ਦੇ ਸਕਦੇ ਹੋ।`;
+    } else if (language === "or") {
+      intentionalSummary = `ଯୋଗ୍ୟତା ସୂଚନା: ${schemeTitle} ପାଇଁ ମୁଖ୍ୟ ଯୋଗ୍ୟତା ସର୍ତ୍ତ: ${eligPoints}। ଯଦି ଆପଣ ଏହି ସର୍ତ୍ତ ପୂରଣ କରନ୍ତି ତେବେ ଆବେଦନ କରିପାରିବେ।`;
     } else {
       intentionalSummary = `Eligibility Criteria for ${schemeTitle}: ${eligPoints}. You qualify if you meet these requirements.`;
     }
@@ -563,19 +594,43 @@ export function generateKnowledgeResponse(
       intentionalSummary = `ಅಗತ್ಯ ದಾಖಲೆಗಳು: ${schemeTitle} ಯೋಜನೆಗಾಗಿ ನೀವು ಒದಗಿಸಬೇಕಾದ ಮುಖ್ಯ ದಾಖಲೆಗಳು: ${docPoints}.`;
     } else if (language === "ta") {
       intentionalSummary = `தேவையான ஆவணங்கள்: ${schemeTitle} திட்டத்திற்கு நீங்கள் சமர்ப்பிக்க வேண்டியவை: ${docPoints}.`;
+    } else if (language === "mr") {
+      intentionalSummary = `आवश्यक कागदपत्रे: ${schemeTitle} साठी आवश्यक असणारी मुख्य कागदपत्रे: ${docPoints}.`;
+    } else if (language === "bn") {
+      intentionalSummary = `প্রয়োজনীয় কাগজপত্র: ${schemeTitle} প্রকল্পের জন্য জমা দিতে হবে: ${docPoints}।`;
+    } else if (language === "gu") {
+      intentionalSummary = `જરૂરી દસ્તાવેજો: ${schemeTitle} માટે તમારે તૈયાર રાખવાના મુખ્ય દસ્તાવેજો: ${docPoints}.`;
+    } else if (language === "ml") {
+      intentionalSummary = `ആവശ്യമായ രേഖകൾ: ${schemeTitle} പദ്ധതിക്കായി നിങ്ങൾ സമർപ്പിക്കേണ്ട രേഖകൾ: ${docPoints}.`;
+    } else if (language === "pa") {
+      intentionalSummary = `ਲੋੜੀਂਦੇ ਦਸਤਾਵੇਜ਼: ${schemeTitle} ਲਈ ਲੋੜੀਂਦੇ ਮੁੱਖ ਦਸਤਾਵੇਜ਼: ${docPoints}।`;
+    } else if (language === "or") {
+      intentionalSummary = `ଆବଶ୍ୟକ ଦସ୍ତାବିଜ: ${schemeTitle} ପାଇଁ ଆବଶ୍ୟକ ମୁଖ୍ୟ ପ୍ରମାଣପତ୍ର: ${docPoints}।`;
     } else {
       intentionalSummary = `Required Documents for ${schemeTitle}: You will need to provide: ${docPoints}.`;
     }
   } else if (intent === "APPLICATION_STEPS") {
     const stepPoints = stepsList.slice(0, 2).join(". ");
     if (language === "hi") {
-      intentionalSummary = `आवेदन प्रक्रिया: ${schemeTitle} में आवेदन करने के लिए: ${stepPoints}।`;
+      intentionalSummary = `आवेदन प्रक्रिया: ${schemeTitle} में आवेदन करने के चरण: ${stepPoints}।`;
     } else if (language === "te") {
       intentionalSummary = `దరఖాస్తు విధానం: ${schemeTitle} కొరకు దరఖాస్తు చేయు విధానం: ${stepPoints}.`;
     } else if (language === "kn") {
       intentionalSummary = `ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ವಿಧಾನ: ${schemeTitle} ಯೋಜನೆಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಲು: ${stepPoints}.`;
     } else if (language === "ta") {
       intentionalSummary = `விண்ணப்பிக்கும் முறை: ${schemeTitle} திட்டத்திற்கு விண்ணப்பிக்க: ${stepPoints}.`;
+    } else if (language === "mr") {
+      intentionalSummary = `अर्ज करण्याची पद्धत: ${schemeTitle} साठी अर्ज करण्याचे टप्पे: ${stepPoints}.`;
+    } else if (language === "bn") {
+      intentionalSummary = `আবেদন পদ্ধতি: ${schemeTitle} প্রকল্পে আবেদনের ধাপ: ${stepPoints}।`;
+    } else if (language === "gu") {
+      intentionalSummary = `અરજી કરવાની પ્રક્રિયા: ${schemeTitle} માં અરજી કરવા માટે: ${stepPoints}.`;
+    } else if (language === "ml") {
+      intentionalSummary = `അപേക്ഷിക്കേണ്ട രീതി: ${schemeTitle} പദ്ധതിക്ക് അപേക്ഷിക്കാനുള്ള വഴികൾ: ${stepPoints}.`;
+    } else if (language === "pa") {
+      intentionalSummary = `ਅਰਜ਼ੀ ਦੇਣ ਦੀ ਪ੍ਰਕਿਰਿਆ: ${schemeTitle} ਲਈ ਅਰਜ਼ੀ ਦੇਣ ਦੇ ਪੜਾਅ: ${stepPoints}।`;
+    } else if (language === "or") {
+      intentionalSummary = `ଆବେଦନ ପ୍ରଣାଳୀ: ${schemeTitle} ପାଇଁ ଆବେଦନ କରିବା ନିୟମ: ${stepPoints}।`;
     } else {
       intentionalSummary = `Application Process for ${schemeTitle}: Follow these steps: ${stepPoints}.`;
     }
@@ -589,12 +644,25 @@ export function generateKnowledgeResponse(
       intentionalSummary = `ಯೋಜನೆಯ ಪ್ರಯೋಜನಗಳು: ${schemeTitle} ಯೋಜನೆಯಿಂದ ಸಿಗುವ ಮುಖ್ಯ ಸೌಲಭ್ಯಗಳು: ${benPoints}.`;
     } else if (language === "ta") {
       intentionalSummary = `திட்ட நன்மைகள்: ${schemeTitle} மூலம் கிடைக்கும் முக்கிய நன்மைகள்: ${benPoints}.`;
+    } else if (language === "mr") {
+      intentionalSummary = `योजनेचे फायदे: ${schemeTitle} अंतर्गत मिळणारे मुख्य फायदे: ${benPoints}.`;
+    } else if (language === "bn") {
+      intentionalSummary = `প্রকল্পের সুবিধা: ${schemeTitle} প্রকল্পের প্রধান সুবিধাগুলি হলো: ${benPoints}।`;
+    } else if (language === "gu") {
+      intentionalSummary = `યોજનાના લાભો: ${schemeTitle} હેઠળ મળતા મુખ્ય લાભો: ${benPoints}.`;
+    } else if (language === "ml") {
+      intentionalSummary = `പദ്ധതി ആനുകൂല്യങ്ങൾ: ${schemeTitle} വഴി ലഭിക്കുന്ന പ്രധാന നേട്ടങ്ങൾ: ${benPoints}.`;
+    } else if (language === "pa") {
+      intentionalSummary = `ਸਕੀਮ ਦੇ ਲਾਭ: ${schemeTitle} ਅਧੀਨ ਮਿਲਣ ਵਾਲੇ ਮੁੱਖ ਲਾਭ: ${benPoints}।`;
+    } else if (language === "or") {
+      intentionalSummary = `ଯୋଜନାର ଲାଭ: ${schemeTitle} ଅଧୀନରେ ମିଳୁଥିବା ମୁଖ୍ୟ ସୁବିଧା: ${benPoints}।`;
     } else {
       intentionalSummary = `Benefits of ${schemeTitle}: The primary benefits provided are: ${benPoints}.`;
     }
   }
 
   const structured: StructuredAnswer = {
+    scheme_id: topScheme.id,
     scheme_name: schemeTitle,
     summary: intentionalSummary,
     eligibility: eligibilityList,

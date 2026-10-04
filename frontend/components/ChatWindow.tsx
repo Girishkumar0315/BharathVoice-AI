@@ -5,6 +5,7 @@ import { v4 as uuidLike } from "@/lib/utils";
 import { ChatMessage, AssistantState, Language, SourceRef } from "@/lib/types";
 import { sendChat, sendVoiceTranscript } from "@/lib/api";
 import { generateKnowledgeResponse } from "@/lib/knowledgeEngine";
+import { getLocalizedScheme } from "@/lib/schemeLocalization";
 import { startListening, speak, isSpeechRecognitionSupported } from "@/lib/speech";
 import { isSupabaseConfigured, storeConversationInSupabase, storeMessageInSupabase } from "@/lib/supabase";
 import MessageBubble from "./MessageBubble";
@@ -270,11 +271,14 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
 
         {messages.map((m) => (
           <div key={m.id} className={`w-full flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}>
-            <MessageBubble message={m} />
+            <MessageBubble message={m} currentLanguage={language} />
             {m.role === "assistant" && (
               <div className="flex gap-1.5 sm:gap-2 mt-2 flex-wrap pl-1 sm:pl-11 max-w-full">
                 <button
-                  onClick={() => handleReadAloud(m.content, m.language)}
+                  onClick={() => {
+                    const speechText = (m.structured?.scheme_id ? getLocalizedScheme(m.structured.scheme_id, language)?.summary : null) || m.content;
+                    handleReadAloud(speechText, language);
+                  }}
                   className="text-xs text-mist hover:text-bone hover:bg-white/5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 hover:border-saffron/30 transition-all duration-200"
                 >
                   🔊 Read Aloud

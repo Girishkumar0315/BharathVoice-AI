@@ -1,8 +1,14 @@
-import { ChatMessage } from "@/lib/types";
+import { ChatMessage, Language } from "@/lib/types";
 import SchemeCard from "./SchemeCard";
 
-export default function MessageBubble({ message }: { message: ChatMessage }) {
+interface MessageBubbleProps {
+  message: ChatMessage;
+  currentLanguage?: Language;
+}
+
+export default function MessageBubble({ message, currentLanguage }: MessageBubbleProps) {
   const isUser = message.role === "user";
+  const activeLanguage = currentLanguage || message.language || "en";
 
   if (isUser) {
     return (
@@ -24,7 +30,7 @@ export default function MessageBubble({ message }: { message: ChatMessage }) {
       </div>
       <div className="max-w-[92%] md:max-w-[88%] flex-1">
         {message.structured ? (
-          <SchemeCard answer={message.structured} sources={message.sources || []} />
+          <SchemeCard answer={message.structured} sources={message.sources || []} language={activeLanguage} />
         ) : (
           <div className="glass-strong rounded-2xl rounded-tl-sm px-5 py-3.5 text-sm text-bone/95 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-md leading-relaxed whitespace-pre-wrap select-text">
             {message.content}
