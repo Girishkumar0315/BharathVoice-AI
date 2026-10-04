@@ -2,7 +2,7 @@
 from typing import List, Optional, Literal
 from pydantic import BaseModel, Field
 
-Language = Literal["en", "hi", "te", "kn"]
+Language = Literal["en", "hi", "te", "kn", "ta", "mr", "bn", "gu", "ml", "pa", "or"]
 
 
 class TTSRequest(BaseModel):

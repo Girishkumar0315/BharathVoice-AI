@@ -12,6 +12,13 @@ LANGUAGE_NAMES = {
     "hi": "Hindi (हिन्दी)",
     "te": "Telugu (తెలుగు)",
     "kn": "Kannada (ಕನ್ನಡ)",
+    "ta": "Tamil (தமிழ்)",
+    "mr": "Marathi (मराठी)",
+    "bn": "Bengali (বাংলা)",
+    "gu": "Gujarati (ગુજરાતી)",
+    "ml": "Malayalam (മലയാളം)",
+    "pa": "Punjabi (ਪੰਜਾਬੀ)",
+    "or": "Odia (ଓଡ଼ିଆ)",
 }
 
 LOCALE_MAP = {
@@ -19,6 +26,13 @@ LOCALE_MAP = {
     "hi": "hi-IN",
     "te": "te-IN",
     "kn": "kn-IN",
+    "ta": "ta-IN",
+    "mr": "mr-IN",
+    "bn": "bn-IN",
+    "gu": "gu-IN",
+    "ml": "ml-IN",
+    "pa": "pa-IN",
+    "or": "or-IN",
 }
 
 # Canned, reliable translations for core system messages

@@ -25,13 +25,14 @@ function AssistantContent() {
   const [rightTab, setRightTab] = useState<"sources" | "documents" | "guide">("sources");
   const [mobileTab, setMobileTab] = useState<"chat" | "tools">("chat");
   const [externalQuery, setExternalQuery] = useState<{ text: string; nonce: number } | null>(null);
+  const [showMoreOnboardingLangs, setShowMoreOnboardingLangs] = useState(false);
 
   useEffect(() => {
     const onboarded = localStorage.getItem(LANGUAGE_ONBOARDING_KEY);
     if (!onboarded) setShowOnboarding(true);
 
     const lang = searchParams.get("lang") as Language;
-    if (lang && ["en", "hi", "te", "kn"].includes(lang)) {
+    if (lang && ["en", "hi", "te", "kn", "ta", "mr", "bn", "gu", "ml", "pa", "or"].includes(lang)) {
       setLanguage(lang);
       setShowOnboarding(false);
     }
@@ -92,6 +93,39 @@ function AssistantContent() {
                 <span>🚪</span>
                 <span className="hidden sm:inline">Sign Out</span>
               </button>
+            </div>
+          </div>
+
+          {/* Voice Assistance Description Banner */}
+          <div className="glass-strong rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4 border border-saffron/20 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-saffron/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
+              <div className="flex items-start gap-2.5">
+                <span className="text-xl sm:text-2xl shrink-0 p-1.5 rounded-xl bg-saffron/15 border border-saffron/30">🎙️</span>
+                <div>
+                  <h2 className="text-xs sm:text-sm font-bold text-bone flex items-center gap-2">
+                    <span>Voice-First Citizen Assistant</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyber/20 text-cyber border border-cyber/30 font-semibold">
+                      Intent-Aware
+                    </span>
+                  </h2>
+                  <p className="text-[11px] sm:text-xs text-mist/90 mt-0.5 max-w-2xl leading-relaxed">
+                    Speak or type in your mother tongue (English, Hindi, Telugu, Kannada, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi, or Odia). 
+                    BharathVoice understands your intent—whether seeking scholarships, farmer subsidies, healthcare aid, or application procedures—and speaks back step-by-step verified guidance.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
+                <span className="text-[10px] px-2.5 py-1 rounded-full glass border border-white/10 text-mist flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-saffron animate-pulse" />
+                  11+ Languages
+                </span>
+                <span className="text-[10px] px-2.5 py-1 rounded-full glass border border-white/10 text-mist flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyber animate-pulse" />
+                  Voice I/O
+                </span>
+              </div>
             </div>
           </div>
 
@@ -254,13 +288,17 @@ function AssistantContent() {
               </div>
             </div>
             
-            <h2 className="font-display text-xl sm:text-2xl font-bold mb-2 text-bone">Choose your language</h2>
-            <p className="text-xs sm:text-sm text-mist/90 mb-6 font-medium">BharathVoice will speak, listen and respond in your language.</p>
+            <h2 className="font-display text-xl sm:text-2xl font-bold mb-2 text-bone">Choose Your Native Language</h2>
+            <p className="text-xs sm:text-sm text-mist/90 mb-5 font-medium leading-relaxed">
+              BharathVoice AI speaks, listens and understands your intention in 11 Indian languages. Pick your language to get started with voice assistance:
+            </p>
             
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+            {/* Primary Languages */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 mb-3">
               {(["en", "hi", "te", "kn"] as Language[]).map((lang) => (
                 <button
                   key={lang}
+                  type="button"
                   onClick={() => completeOnboarding(lang)}
                   className="glass-strong rounded-xl sm:rounded-2xl py-3 sm:py-3.5 px-3 text-xs sm:text-sm font-semibold border border-white/10 hover:border-saffron hover:bg-saffron/10 hover:shadow-[0_0_20px_rgba(255,122,61,0.2)] active:scale-95 transition-all duration-300"
                 >
@@ -268,6 +306,42 @@ function AssistantContent() {
                 </button>
               ))}
             </div>
+
+            {/* Toggle More Languages Button */}
+            {!showMoreOnboardingLangs ? (
+              <button
+                type="button"
+                onClick={() => setShowMoreOnboardingLangs(true)}
+                className="w-full py-2.5 px-4 rounded-xl glass border border-white/15 text-xs text-mist hover:text-bone hover:border-amethyst/50 transition-all flex items-center justify-center gap-2"
+              >
+                <span>+ More Indian Languages (Tamil, Marathi, Bengali...)</span>
+                <span className="text-[10px]">▼</span>
+              </button>
+            ) : (
+              <div className="space-y-2 pt-2 border-t border-white/10 animate-fadeIn">
+                <div className="text-[11px] font-semibold text-mist text-left">Additional Regional Languages:</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[180px] overflow-y-auto custom-scrollbar pr-1">
+                  {[
+                    { code: "ta" as Language, name: "தமிழ் (Tamil)" },
+                    { code: "mr" as Language, name: "मराठी (Marathi)" },
+                    { code: "bn" as Language, name: "বাংলা (Bengali)" },
+                    { code: "gu" as Language, name: "ગુજરાતી (Gujarati)" },
+                    { code: "ml" as Language, name: "മലയാളം (Malayalam)" },
+                    { code: "pa" as Language, name: "ਪੰਜਾਬੀ (Punjabi)" },
+                    { code: "or" as Language, name: "ଓଡ଼ିଆ (Odia)" },
+                  ].map((extra) => (
+                    <button
+                      key={extra.code}
+                      type="button"
+                      onClick={() => completeOnboarding(extra.code)}
+                      className="glass rounded-xl py-2 px-2 text-[11px] font-medium border border-white/10 hover:border-amethyst hover:bg-amethyst/15 hover:text-bone transition-all text-left"
+                    >
+                      {extra.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

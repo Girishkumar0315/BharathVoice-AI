@@ -151,23 +151,33 @@ export default function HeroSection() {
           </Link>
         </div>
 
-        {/* Supported Languages (English, Hindi, Telugu, Kannada) */}
-        <div className="flex flex-wrap justify-center gap-3 mb-14 max-w-2xl">
+        {/* Supported Languages (Primary + More Indian Languages) */}
+        <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-14 max-w-3xl">
           {[
             { code: "en", name: "English" },
             { code: "hi", name: "हिन्दी" },
             { code: "te", name: "తెలుగు" },
             { code: "kn", name: "ಕನ್ನಡ" },
+            { code: "ta", name: "தமிழ்" },
+            { code: "mr", name: "मराठी" },
+            { code: "bn", name: "বাংলা" },
+            { code: "gu", name: "ગુજરાતી" },
           ].map((lang) => (
             <Link 
               key={lang.code}
               href={`/assistant?lang=${lang.code}`}
-              className="px-5 py-2.5 rounded-2xl glass-strong border border-white/10 text-sm text-bone font-medium hover:border-saffron hover:bg-saffron/15 hover:shadow-[0_0_20px_rgba(255,122,61,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-2xl glass-strong border border-white/10 text-xs sm:text-sm text-bone font-medium hover:border-saffron hover:bg-saffron/15 hover:shadow-[0_0_20px_rgba(255,122,61,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
             >
               <span className="text-saffron font-bold text-xs">●</span>
               <span>{lang.name}</span>
             </Link>
           ))}
+          <Link
+            href="/assistant"
+            className="px-4 py-2 sm:py-2.5 rounded-2xl glass border border-amethyst/40 text-xs sm:text-sm text-amethyst-light font-medium hover:border-cyber hover:bg-cyber/15 transition-all flex items-center gap-1.5"
+          >
+            <span>+ 3 More (മലയാളം, ਪੰਜਾਬੀ, ଓଡ଼ିଆ)</span>
+          </Link>
         </div>
 
         {/* Interactive 3D Showcase Container */}
@@ -293,6 +303,36 @@ export default function HeroSection() {
                 <button
                   onClick={() => {
                     setOrbState("speaking");
+                    speak("வணக்கம்! நான் பாரத்வாய்ஸ் AI. அரசு நலத்திட்டங்கள் மற்றும் கல்வி உதவித்தொகை பற்றி உங்களுக்கு என்ன தகவல் வேண்டும்?", "ta", () => setOrbState("idle"));
+                  }}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold glass border border-white/15 hover:border-saffron hover:bg-saffron/20 transition-all flex items-center gap-2 shadow-sm"
+                >
+                  <span>🔊</span>
+                  <span>Tamil (தமிழ்)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setOrbState("speaking");
+                    speak("नमस्कार! मी भारतव्हॉइस AI आहे. सरकारी योजना आणि शिष्यवृत्तीबद्दल मी तुम्हाला कशी मदत करू शकतो?", "mr", () => setOrbState("idle"));
+                  }}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold glass border border-white/15 hover:border-gulal hover:bg-gulal/20 transition-all flex items-center gap-2 shadow-sm"
+                >
+                  <span>🔊</span>
+                  <span>Marathi (मराठी)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setOrbState("speaking");
+                    speak("নমস্কার! আমি ভারতভয়েস AI। সরকারি প্রকল্প এবং স্কলারশিপ সম্পর্কে আপনাকে কীভাবে সাহায্য করতে পারি?", "bn", () => setOrbState("idle"));
+                  }}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold glass border border-white/15 hover:border-cyber hover:bg-cyber/20 transition-all flex items-center gap-2 shadow-sm"
+                >
+                  <span>🔊</span>
+                  <span>Bengali (বাংলা)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setOrbState("speaking");
                     speak("Namaste! Welcome to BharathVoice AI. How can I assist you with government scholarships, welfare schemes, and citizen services today?", "en", () => setOrbState("idle"));
                   }}
                   className="px-4 py-2 rounded-xl text-xs font-semibold glass border border-white/15 hover:border-neon hover:bg-neon/20 transition-all flex items-center gap-2 shadow-sm"
@@ -308,7 +348,7 @@ export default function HeroSection() {
         {/* Stats Counters */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-4xl mx-auto border-t border-white/10 pt-10">
           {[
-            { label: "Supported Languages", value: "4 Languages" },
+            { label: "Supported Languages", value: "11+ Languages" },
             { label: "Welfare Categories", value: "6+ Domains" },
             { label: "Voice Latency", value: "Real-time" },
             { label: "Grounding", value: "100% RAG Verified" },

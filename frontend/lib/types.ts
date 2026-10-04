@@ -1,4 +1,15 @@
-export type Language = "en" | "hi" | "te" | "kn";
+export type Language =
+  | "en"
+  | "hi"
+  | "te"
+  | "kn"
+  | "ta"
+  | "mr"
+  | "bn"
+  | "gu"
+  | "ml"
+  | "pa"
+  | "or";
 
 export interface SourceRef {
   title: string;

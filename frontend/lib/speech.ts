@@ -8,6 +8,13 @@ export const SPEECH_LOCALES: Record<Language, string> = {
   hi: "hi-IN",
   te: "te-IN",
   kn: "kn-IN",
+  ta: "ta-IN",
+  mr: "mr-IN",
+  bn: "bn-IN",
+  gu: "gu-IN",
+  ml: "ml-IN",
+  pa: "pa-IN",
+  or: "or-IN",
 };
 
 let currentAudio: HTMLAudioElement | null = null;
@@ -90,10 +97,22 @@ function cleanTextForSpeech(text: string, language: Language): string {
 
   if (language === "te") {
     cleaned = cleaned.replace(/రూ\.\s*/g, "రూపాయలు ").replace(/రూ\s+/g, "రూపాయలు ");
-  } else if (language === "hi") {
+  } else if (language === "hi" || language === "mr") {
     cleaned = cleaned.replace(/रु\.\s*/g, "रुपये ").replace(/रु\s+/g, "रुपये ");
   } else if (language === "kn") {
     cleaned = cleaned.replace(/ರೂ\.\s*/g, "ರೂಪಾಯಿ ");
+  } else if (language === "ta") {
+    cleaned = cleaned.replace(/ரூ\.\s*/g, "ரூபாய் ").replace(/ரூ\s+/g, "ரூபாய் ");
+  } else if (language === "bn") {
+    cleaned = cleaned.replace(/টাকা\s*/g, "টাকা ");
+  } else if (language === "gu") {
+    cleaned = cleaned.replace(/રૂ\.\s*/g, "રૂપિયા ");
+  } else if (language === "ml") {
+    cleaned = cleaned.replace(/രൂ\.\s*/g, "രൂപ ");
+  } else if (language === "pa") {
+    cleaned = cleaned.replace(/ਰੁ\.\s*/g, "ਰੁਪਏ ");
+  } else if (language === "or") {
+    cleaned = cleaned.replace(/ଟ\.\s*/g, "ଟଙ୍କା ");
   } else if (language === "en") {
     cleaned = cleaned.replace(/Rs\.\s*/gi, "Rupees ").replace(/Rs\s+/gi, "Rupees ");
     cleaned = cleaned.replace(/Govt\.\s*/gi, "Government ");
@@ -124,6 +143,13 @@ function scoreVoice(v: SpeechSynthesisVoice, language: Language): number {
   if (language === "te" && (name.includes("telugu") || name.includes("mohan") || name.includes("shruti"))) score += 30;
   if (language === "hi" && (name.includes("hindi") || name.includes("swara") || name.includes("madhur"))) score += 30;
   if (language === "kn" && (name.includes("kannada") || name.includes("gagan") || name.includes("sapna"))) score += 30;
+  if (language === "ta" && (name.includes("tamil") || name.includes("valluvar") || name.includes("iniya"))) score += 30;
+  if (language === "mr" && (name.includes("marathi") || name.includes("aarohi") || name.includes("manohar"))) score += 30;
+  if (language === "bn" && (name.includes("bengali") || name.includes("bangla") || name.includes("bashkar") || name.includes("tanishaa"))) score += 30;
+  if (language === "gu" && (name.includes("gujarati") || name.includes("dhwani") || name.includes("niranjan"))) score += 30;
+  if (language === "ml" && (name.includes("malayalam") || name.includes("midhun") || name.includes("sobha"))) score += 30;
+  if (language === "pa" && (name.includes("punjabi") || name.includes("gurmukhi") || name.includes("harman"))) score += 30;
+  if (language === "or" && (name.includes("odia") || name.includes("oriya"))) score += 30;
   if (language === "en" && (name.includes("india") || name.includes("neerja") || name.includes("ravi"))) score += 30;
 
   return score;
@@ -280,10 +306,28 @@ function fallbackBrowserSpeak(cleanedText: string, language: Language, onEnd?: (
     if (language === "te") {
       utterance.rate = 0.94;
       utterance.pitch = 1.02;
-    } else if (language === "hi") {
+    } else if (language === "hi" || language === "mr") {
       utterance.rate = 0.95;
       utterance.pitch = 1.03;
     } else if (language === "kn") {
+      utterance.rate = 0.94;
+      utterance.pitch = 1.02;
+    } else if (language === "ta") {
+      utterance.rate = 0.94;
+      utterance.pitch = 1.02;
+    } else if (language === "bn") {
+      utterance.rate = 0.95;
+      utterance.pitch = 1.03;
+    } else if (language === "gu") {
+      utterance.rate = 0.95;
+      utterance.pitch = 1.02;
+    } else if (language === "ml") {
+      utterance.rate = 0.93;
+      utterance.pitch = 1.02;
+    } else if (language === "pa") {
+      utterance.rate = 0.96;
+      utterance.pitch = 1.03;
+    } else if (language === "or") {
       utterance.rate = 0.94;
       utterance.pitch = 1.02;
     } else {

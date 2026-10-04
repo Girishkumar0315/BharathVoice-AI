@@ -37,6 +37,48 @@ const SUGGESTED_QUESTIONS: Record<Language, string[]> = {
     "ಕೃಷಿ ಬೆಂಬಲದ ಬಗ್ಗೆ ಹೇಳಿ",
     "ಉದ್ಯೋಗ ಸಂಬಂಧಿತ ಯೋಜನೆಗಳನ್ನು ಹುಡುಕಿ",
   ],
+  ta: [
+    "மாணவர்களுக்கான கல்வி உதவித்தொகைகள் என்ன?",
+    "விவசாய திட்டங்கள் மற்றும் மானியம் பற்றி சொல்லுங்கள்",
+    "இந்த அரசு அறிவிப்பை விளக்கமாக கூறுங்கள்",
+    "வேலைவாய்ப்பு மற்றும் சிறுதொழில் கடன் திட்டங்கள்",
+  ],
+  mr: [
+    "विद्यार्थ्यांसाठी कोणत्या शिष्यवृत्ती उपलब्ध आहेत?",
+    "कृषी सहाय्य आणि शेतकरी योजनांबद्दल सांगा",
+    "या सरकारी अधिसूचनेबद्दल सविस्तर माहिती द्या",
+    "रोजगार आणि स्वयंरोजगार योजना शोधा",
+  ],
+  bn: [
+    "ছাত্রছাত্রীদের জন্য কী কী স্কলারশিপ রয়েছে?",
+    "কৃষকদের জন্য সরকারি সহায়তা প্রকল্প বলুন",
+    "এই সরকারি বিজ্ঞপ্তি সম্পর্কে ব্যাখ্যা করুন",
+    "কর্মসংস্থান ও ঋণের প্রকল্প খুঁজুন",
+  ],
+  gu: [
+    "વિદ્યાર્થીઓ માટે કઈ સ્કોલરશિપ ઉપલબ્ધ છે?",
+    "ખેડૂત સહાય અને કૃષિ યોજનાઓ જણાવો",
+    "આ સરકારી નોટિફિકેશન વિશે સમજાવો",
+    "રોજગાર અને ધિરાણ યોજનાઓ શોધો",
+  ],
+  ml: [
+    "വിദ്യാർത്ഥികൾക്കുള്ള സ്കോളർഷിപ്പുകൾ ഏതെല്ലാം?",
+    "കർഷക സഹായ പദ്ധതികളെക്കുറിച്ച് പറയൂ",
+    "ഈ സർക്കാർ വിജ്ഞാപനം വിശദീകരിക്കുക",
+    "തൊഴിൽ വായ്പാ പദ്ധതികൾ കണ്ടെത്തുക",
+  ],
+  pa: [
+    "ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਕਿਹੜੇ ਵਜ਼ੀਫ਼ੇ ਉਪਲਬਧ ਹਨ?",
+    "ਕਿਸਾਨ ਸਹਾਇਤਾ ਸਕੀਮਾਂ ਬਾਰੇ ਦੱਸੋ",
+    "ਇਸ ਸਰਕਾਰੀ ਨੋਟੀਫਿਕੇਸ਼ਨ ਬਾਰੇ ਸਮਝਾਓ",
+    "ਰੋਜ਼ਗਾਰ ਅਤੇ ਕਰਜ਼ਾ ਸਕੀਮਾਂ ਲੱਭੋ",
+  ],
+  or: [
+    "ଛାତ୍ରଛାତ୍ରୀଙ୍କ ପାଇଁ କେଉଁ ସ୍କଲାରସିପ୍ ଉପଲବ୍ଧ?",
+    "କୃଷକ ସହାୟତା ଯୋଜନା ବିଷୟରେ କୁହନ୍ତୁ",
+    "ଏହି ସରକାରୀ ବିଜ୍ଞପ୍ତି ବିଷୟରେ ବୁଝାନ୍ତୁ",
+    "ନିଯୁକ୍ତି ଏବଂ ଋଣ ଯୋଜନା ଖୋଜନ୍ତୁ",
+  ],
 };
 
 interface ChatWindowProps {
@@ -199,20 +241,27 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
     <div className="flex flex-col h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-1 py-4 space-y-5">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-6 py-10">
+          <div className="flex flex-col items-center justify-center h-full text-center gap-5 py-6 sm:py-8 max-w-xl mx-auto">
             <AIOrb state={assistantState} size="md" />
-            <div>
-              <h2 className="font-display text-xl font-semibold mb-1">How can I help you today?</h2>
-              <p className="text-sm text-mist">Ask about scholarships, schemes, documents, or eligibility.</p>
+            <div className="space-y-1.5 px-3">
+              <h2 className="font-display text-lg sm:text-2xl font-bold text-bone">
+                How Can BharathVoice Assist You?
+              </h2>
+              <p className="text-xs sm:text-sm text-mist/90 leading-relaxed max-w-md mx-auto">
+                Tap the microphone 🎙️ below to speak, or type your query in your language. 
+                BharathVoice understands your intent and provides step-by-step eligibility, documents, and benefits with live voice responses.
+              </p>
             </div>
-            <div className="grid sm:grid-cols-2 gap-2 max-w-lg">
-              {SUGGESTED_QUESTIONS[language].map((q) => (
+            
+            <div className="w-full grid sm:grid-cols-2 gap-2 text-left pt-2">
+              {(SUGGESTED_QUESTIONS[language] || SUGGESTED_QUESTIONS.en).map((q) => (
                 <button
                   key={q}
                   onClick={() => sendMessage(q)}
-                  className="text-left text-sm glass rounded-xl px-4 py-2.5 border border-white/10 hover:border-saffron/40 transition"
+                  className="text-left text-xs sm:text-sm glass-strong rounded-xl px-4 py-3 border border-white/10 hover:border-saffron/50 hover:bg-white/10 active:scale-95 transition-all duration-200 group flex items-start justify-between gap-2 shadow-sm"
                 >
-                  {q}
+                  <span className="text-mist group-hover:text-bone transition-colors">{q}</span>
+                  <span className="text-xs text-saffron opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                 </button>
               ))}
             </div>

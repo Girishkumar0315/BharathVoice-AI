@@ -9,9 +9,9 @@ export default function Footer() {
           <BrandLogo size="sm" showText={false} />
           <span className="font-medium">BharathVoice AI — Voice-First Multilingual Citizen Intelligence Platform</span>
         </div>
-        <div className="flex gap-4">
-          {["English", "हिन्दी", "తెలుగు", "ಕನ್ನಡ"].map(lang => (
-            <span key={lang} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-saffron/50 hover:shadow-glow transition-all animate-breathe cursor-pointer">
+        <div className="flex gap-2 sm:gap-3 flex-wrap justify-center">
+          {["English", "हिन्दी", "తెలుగు", "ಕನ್ನಡ", "தமிழ்", "मराठी", "বাংলা", "+ 4 More"].map(lang => (
+            <span key={lang} className="px-3 py-1 text-xs rounded-full bg-white/5 border border-white/10 hover:border-saffron/50 hover:shadow-glow transition-all animate-breathe cursor-pointer">
               {lang}
             </span>
           ))}
