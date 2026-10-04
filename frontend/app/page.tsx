@@ -6,11 +6,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth, saveUser, loginWithCredentials, registerAccount } from "@/lib/auth";
 import { useLanguage } from "@/lib/useLanguage";
-import { ALL_LANGUAGES } from "@/components/LanguageSelector";
 
 export default function LandingPage() {
   const { user, isLoggedIn, logout } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   
   // Auth Form State
   const [authTab, setAuthTab] = useState<"login" | "signup">("login");
@@ -223,7 +222,7 @@ export default function LandingPage() {
               <div className="max-w-4xl mx-auto w-full flex flex-col items-center">
                 
                 {/* Centered Brand Name & Project Mission Matter */}
-                <div className="text-center space-y-6 max-w-3xl mx-auto">
+                <div className="text-center space-y-5 max-w-3xl mx-auto">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-saffron/30 text-xs text-bone shadow-glow">
                     <span className="w-2 h-2 rounded-full bg-saffron animate-pulse" />
                     <span>AI for Bharat in Indian Languages</span>
@@ -234,55 +233,8 @@ export default function LandingPage() {
                   </h1>
 
                   <p className="text-base sm:text-lg text-mist max-w-2xl mx-auto leading-relaxed font-light">
-                    Voice-first citizen intelligence designed to empower every Indian. Access verified student scholarships, 
-                    farmer income support, healthcare coverage, and government welfare in your mother tongue in{" "}
-                    <strong className="text-bone font-medium">11 Indian Languages</strong>.
+                    Voice-first citizen intelligence designed to empower every Indian. Access verified government welfare schemes, scholarships, healthcare coverage, and farmer support — all in your mother tongue.
                   </p>
-
-                  {/* Languages Supported - All 11 Indian Languages from Chat */}
-                  <div className="w-full max-w-3xl mx-auto pt-2">
-                    <div className="text-xs font-semibold text-mist uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
-                      <span>🇮🇳</span>
-                      <span>{t.heroSupportedTitle} ({ALL_LANGUAGES.length} Languages)</span>
-                    </div>
-
-                    <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
-                      {ALL_LANGUAGES.map((l) => {
-                        const isActive = language === l.code;
-                        return (
-                          <button
-                            key={l.code}
-                            type="button"
-                            onClick={() => {
-                              setLanguage(l.code);
-                            }}
-                            className={`px-3.5 py-2 rounded-xl text-center border transition-all cursor-pointer active:scale-95 flex items-center gap-2 ${
-                              isActive
-                                ? "bg-gradient-to-r from-saffron/30 via-gulal/20 to-amethyst/30 border-saffron text-bone shadow-glow scale-105"
-                                : "glass border-white/10 hover:border-saffron/40 hover:bg-white/10 text-mist hover:text-bone"
-                            }`}
-                            title={`Switch website to ${l.label}`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-saffron animate-pulse" : "bg-white/30"}`} />
-                            <span className="text-xs font-bold text-bone">{l.native}</span>
-                            <span className="text-[10px] text-mist/70">({l.label})</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-4 pt-3 text-xs text-mist flex-wrap">
-                    <span className="flex items-center gap-1.5">
-                      <span className="text-cyber font-bold">✓</span> {t.featVoiceReply}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="text-cyber font-bold">✓</span> {t.featVerifiedSources}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="text-cyber font-bold">✓</span> {t.featZeroEnglish}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Down Center: High-Impact Action Buttons (in place of big pages/forms) */}
@@ -324,6 +276,27 @@ export default function LandingPage() {
                     <span>🚀 Instant Guest Demo (One-click)</span>
                     <span>→</span>
                   </button>
+                </div>
+
+                {/* Features Highlight Section */}
+                <div className="mt-14 w-full max-w-3xl mx-auto">
+                  <p className="text-[11px] uppercase tracking-widest text-mist/50 text-center mb-5 font-semibold">What BharathVoice AI Offers</p>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {[
+                      { icon: "🎙️", title: "Voice-First Interaction", desc: "Speak naturally in your mother tongue — no English or typing needed." },
+                      { icon: "🏛️", title: "Government Schemes", desc: "Instant access to PM-KISAN, Ayushman Bharat, PMAY, Scholarships & more." },
+                      { icon: "🛡️", title: "100% Verified Data", desc: "All answers grounded in official government registries — zero hallucinations." },
+                      { icon: "🌐", title: "11 Indian Languages", desc: "Telugu, Hindi, Kannada, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi & more." },
+                      { icon: "⚡", title: "Sub-Second Responses", desc: "FAISS-powered RAG pipeline delivers accurate answers in under 300ms." },
+                      { icon: "📄", title: "Document Eligibility Check", desc: "Upload your documents and instantly verify scheme eligibility & requirements." },
+                    ].map((f) => (
+                      <div key={f.title} className="glass rounded-2xl p-4 border border-white/8 hover:border-saffron/25 transition-all text-left group">
+                        <span className="text-xl mb-2 block group-hover:scale-110 transition-transform duration-200 w-fit">{f.icon}</span>
+                        <h3 className="text-xs font-bold text-bone mb-1">{f.title}</h3>
+                        <p className="text-[11px] text-mist/75 leading-relaxed">{f.desc}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
