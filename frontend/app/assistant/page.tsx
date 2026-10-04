@@ -64,7 +64,7 @@ function AssistantContent() {
       <div className="flex-1 grid lg:grid-cols-[1fr_320px] min-h-screen relative z-10">
         <main className="px-3 sm:px-6 py-4 sm:py-6 flex flex-col min-h-screen relative">
           {/* Top Header Bar */}
-          <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2.5">
+          <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2.5 relative z-40">
             <div className="flex items-center gap-2.5">
               <Link href="/" className="md:hidden block shrink-0">
                 <BrandLogo size="sm" showText={false} />
@@ -93,39 +93,6 @@ function AssistantContent() {
                 <span>🚪</span>
                 <span className="hidden sm:inline">Sign Out</span>
               </button>
-            </div>
-          </div>
-
-          {/* Voice Assistance Description Banner */}
-          <div className="glass-strong rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4 border border-saffron/20 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-saffron/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
-              <div className="flex items-start gap-2.5">
-                <span className="text-xl sm:text-2xl shrink-0 p-1.5 rounded-xl bg-saffron/15 border border-saffron/30">🎙️</span>
-                <div>
-                  <h2 className="text-xs sm:text-sm font-bold text-bone flex items-center gap-2">
-                    <span>Voice-First Citizen Assistant</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyber/20 text-cyber border border-cyber/30 font-semibold">
-                      Intent-Aware
-                    </span>
-                  </h2>
-                  <p className="text-[11px] sm:text-xs text-mist/90 mt-0.5 max-w-2xl leading-relaxed">
-                    Speak or type in your mother tongue (English, Hindi, Telugu, Kannada, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi, or Odia). 
-                    BharathVoice understands your intent—whether seeking scholarships, farmer subsidies, healthcare aid, or application procedures—and speaks back step-by-step verified guidance.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
-                <span className="text-[10px] px-2.5 py-1 rounded-full glass border border-white/10 text-mist flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-saffron animate-pulse" />
-                  11+ Languages
-                </span>
-                <span className="text-[10px] px-2.5 py-1 rounded-full glass border border-white/10 text-mist flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyber animate-pulse" />
-                  Voice I/O
-                </span>
-              </div>
             </div>
           </div>
 

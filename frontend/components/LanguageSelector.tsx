@@ -51,7 +51,7 @@ export default function LanguageSelector({ value, onChange, compact }: LanguageS
   const isExtraActive = !!activeExtraLang;
 
   return (
-    <div ref={containerRef} className="relative inline-flex items-center">
+    <div ref={containerRef} className="relative inline-flex items-center z-50">
       <div className={`flex ${compact ? "gap-1.5 sm:gap-2" : "gap-2.5"} flex-wrap items-center`}>
         {/* Primary Language Buttons */}
         {PRIMARY_LANGUAGES.map((l) => {
@@ -108,7 +108,7 @@ export default function LanguageSelector({ value, onChange, compact }: LanguageS
 
       {/* Dropdown Menu for Extra Languages */}
       {isOpen && (
-        <div className="absolute top-full right-0 sm:left-auto mt-2 z-50 min-w-[280px] sm:min-w-[340px] max-w-[90vw] glass-strong rounded-2xl border border-white/15 p-3 sm:p-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)] backdrop-blur-2xl animate-scaleIn">
+        <div className="absolute top-full right-0 mt-2 z-[9999] min-w-[280px] sm:min-w-[340px] max-w-[90vw] bg-[#0c0d14]/98 rounded-2xl border border-white/20 p-3 sm:p-4 shadow-[0_20px_60px_rgba(0,0,0,0.9)] backdrop-blur-3xl animate-scaleIn">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
             <span className="text-xs font-bold text-bone flex items-center gap-1.5">
               <span>🇮🇳</span>
