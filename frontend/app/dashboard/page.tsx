@@ -90,7 +90,7 @@ export default function DashboardPage() {
       <main className="flex-1 px-3 sm:px-8 py-4 sm:py-6 max-w-6xl mx-auto relative z-10 min-h-screen overflow-y-auto">
         
         {/* Top Header Bar: Logo on mobile, Title, Language Switcher, Home & Sign Out */}
-        <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-white/10 flex-wrap">
+        <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-white/10 flex-wrap relative z-30">
           <div className="flex items-center gap-2.5">
             <Link href="/" className="md:hidden block shrink-0">
               <BrandLogo size="sm" showText={false} />

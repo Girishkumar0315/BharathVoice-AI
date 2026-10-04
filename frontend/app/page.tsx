@@ -3,22 +3,10 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 import { useAuth, saveUser, loginWithCredentials, registerAccount } from "@/lib/auth";
 import { useLanguage } from "@/lib/useLanguage";
 import { ALL_LANGUAGES } from "@/components/LanguageSelector";
-import { speak } from "@/lib/speech";
-
-const PIPELINE = [
-  { step: "Speak", desc: "Citizen speaks naturally in their mother tongue (Telugu, Hindi, Kannada, English)" },
-  { step: "Understand", desc: "Real-time speech recognition parses regional dialects and citizen intent" },
-  { step: "Retrieve", desc: "FAISS vector database retrieves official government schemes with cross-lingual embeddings" },
-  { step: "Verify", desc: "Strict relevance scoring confirms factual alignment with official government registries" },
-  { step: "Explain", desc: "Eligibility rules, monetary benefits, and application steps synthesized without jargon" },
-  { step: "Guide", desc: "Actionable checklist of required certificates, deadlines, and official portal links" },
-  { step: "Act", desc: "Direct audio playback using high-definition neural voice with regional cadence" },
-];
 
 export default function LandingPage() {
   const { user, isLoggedIn, logout } = useAuth();
@@ -340,9 +328,6 @@ export default function LandingPage() {
               </div>
             </section>
 
-            {/* Interactive 3D Voice Orb & Neural Globe Showcase */}
-            <HeroSection />
-
             {/* =========================================================================
                 AUTH MODAL DIALOG (Google OAuth, Username/Password & Signup)
                 ========================================================================= */}
@@ -580,86 +565,6 @@ export default function LandingPage() {
                 </div>
               </div>
             )}
-
-            {/* =========================================================================
-                PROJECT MATTER: ABOUT BHARATHVOICE AI, PROBLEM STATEMENT & ARCHITECTURE
-                ========================================================================= */}
-            <section className="max-w-6xl mx-auto px-6 py-16 border-t border-white/10">
-              <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <span className="text-xs font-bold text-saffron uppercase tracking-widest px-3 py-1 rounded-full glass border border-saffron/30">
-                  The Problem &amp; Our Mission
-                </span>
-                <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-bone leading-tight">
-                  Why BharathVoice AI was Built
-                </h2>
-                <p className="text-sm sm:text-base text-mist leading-relaxed font-light">
-                  Over 90% of Indian citizens think, speak, and converse in their regional native languages. 
-                  Yet, government benefit portals, scholarship criteria, and application guidelines are predominantly 
-                  drafted in complex bureaucratic English. Millions miss out on life-changing welfare simply due to linguistic barriers.
-                </p>
-              </div>
-
-              {/* 3 Core Pillars */}
-              <div className="grid md:grid-cols-3 gap-6 mb-16">
-                <div className="glass-strong rounded-2xl p-6 border border-white/10 hover:border-saffron/40 transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-saffron/20 text-saffron flex items-center justify-center text-2xl mb-4">
-                    🎙️
-                  </div>
-                  <h3 className="font-display font-bold text-lg text-bone mb-2">Voice-First Vernacular AI</h3>
-                  <p className="text-xs text-mist leading-relaxed">
-                    Zero keyboard typing or English fluency required. Citizens speak naturally in Telugu, Hindi, or Kannada, 
-                    and receive vocal guidance streamed in high-definition native neural voices.
-                  </p>
-                </div>
-
-                <div className="glass-strong rounded-2xl p-6 border border-white/10 hover:border-amethyst/40 transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-amethyst/20 text-amethyst flex items-center justify-center text-2xl mb-4">
-                    🛡️
-                  </div>
-                  <h3 className="font-display font-bold text-lg text-bone mb-2">100% Verified Resources</h3>
-                  <p className="text-xs text-mist leading-relaxed">
-                    Zero hallucinations. Every eligibility criterion, grant amount, and document requirement is grounded in official government 
-                    registries (National Scholarship Portal, PM-KISAN, Ayushman Bharat, UIDAI).
-                  </p>
-                </div>
-
-                <div className="glass-strong rounded-2xl p-6 border border-white/10 hover:border-cyber/40 transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-cyber/20 text-cyber flex items-center justify-center text-2xl mb-4">
-                    ⚡
-                  </div>
-                  <h3 className="font-display font-bold text-lg text-bone mb-2">Sub-Second Live Response</h3>
-                  <p className="text-xs text-mist leading-relaxed">
-                    Instant FAISS vector indexing combined with pre-warmed multilingual pipelines return comprehensive scheme details in under 
-                    300ms, making conversational voice feel truly alive.
-                  </p>
-                </div>
-              </div>
-
-              {/* How BharathVoice Thinks Pipeline */}
-              <div className="glass-strong rounded-3xl p-8 sm:p-10 border border-white/10 relative overflow-hidden">
-                <div className="text-center max-w-2xl mx-auto mb-10">
-                  <span className="text-xs font-bold text-cyber uppercase tracking-wider">Reliable Architecture</span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-bone mt-1">
-                    How BharathVoice Thinks &amp; Verifies Facts
-                  </h3>
-                  <p className="text-xs text-mist mt-2">
-                    A rigorous 7-stage pipeline ensuring every claim made to a citizen is backed by an authentic government notice.
-                  </p>
-                </div>
-
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {PIPELINE.map((p, idx) => (
-                    <div key={p.step} className="glass p-4 rounded-xl border border-white/5 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-saffron">Step 0{idx + 1}</span>
-                        <span className="text-xs px-2 py-0.5 rounded bg-white/10 text-mist">{p.step}</span>
-                      </div>
-                      <p className="text-[11px] text-mist/90 leading-relaxed font-light">{p.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
           </div>
         ) : (
           /* =========================================================================

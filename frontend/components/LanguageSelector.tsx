@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Language } from "@/lib/types";
 
 export const PRIMARY_LANGUAGES: { code: Language; label: string; native: string }[] = [
@@ -30,20 +31,59 @@ interface LanguageSelectorProps {
 
 export default function LanguageSelector({ value, onChange, compact }: LanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const moreBtnRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownCoords, setDropdownCoords] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
 
-  // Close dropdown on outside click
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const updatePosition = () => {
+    if (!moreBtnRef.current) return;
+    const rect = moreBtnRef.current.getBoundingClientRect();
+    const width = typeof window !== "undefined" && window.innerWidth < 640 ? 290 : 340;
+    let right = window.innerWidth - rect.right;
+    if (right < 12) right = 12;
+    if (window.innerWidth - right < width + 12) {
+      right = Math.max(12, window.innerWidth - width - 12);
+    }
+    setDropdownCoords({
+      top: rect.bottom + 8,
+      right: right,
+    });
+  };
+
+  // Close dropdown on outside click or reposition on scroll/resize
+  useEffect(() => {
+    if (!isOpen) return;
+
+    updatePosition();
+
     function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node) &&
+        moreBtnRef.current &&
+        !moreBtnRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+
+    function handleScrollOrResize() {
+      updatePosition();
     }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+    window.addEventListener("resize", handleScrollOrResize);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScrollOrResize);
+      window.removeEventListener("resize", handleScrollOrResize);
     };
   }, [isOpen]);
 
@@ -51,7 +91,7 @@ export default function LanguageSelector({ value, onChange, compact }: LanguageS
   const isExtraActive = !!activeExtraLang;
 
   return (
-    <div ref={containerRef} className="relative inline-flex items-center z-50">
+    <div className="relative inline-flex items-center z-50">
       <div className={`flex ${compact ? "gap-1.5 sm:gap-2" : "gap-2.5"} flex-wrap items-center`}>
         {/* Primary Language Buttons */}
         {PRIMARY_LANGUAGES.map((l) => {
@@ -82,8 +122,12 @@ export default function LanguageSelector({ value, onChange, compact }: LanguageS
 
         {/* More Languages Button */}
         <button
+          ref={moreBtnRef}
           type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => {
+            updatePosition();
+            setIsOpen((prev) => !prev);
+          }}
           className={`relative overflow-hidden rounded-full font-medium transition-all duration-300 active:scale-95 cursor-pointer flex items-center gap-1.5 ${
             compact ? "px-3 py-1 text-xs" : "px-4 sm:px-5 py-2 text-xs sm:text-sm"
           } ${
@@ -106,9 +150,18 @@ export default function LanguageSelector({ value, onChange, compact }: LanguageS
         </button>
       </div>
 
-      {/* Dropdown Menu for Extra Languages */}
-      {isOpen && (
-        <div className="absolute top-full right-0 mt-2 z-[9999] min-w-[280px] sm:min-w-[340px] max-w-[90vw] bg-[#0c0d14]/98 rounded-2xl border border-white/20 p-3 sm:p-4 shadow-[0_20px_60px_rgba(0,0,0,0.9)] backdrop-blur-3xl animate-scaleIn">
+      {/* Dropdown Menu for Extra Languages Portaled into document.body with ultimate z-index */}
+      {isOpen && mounted && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{
+            position: "fixed",
+            top: `${dropdownCoords.top}px`,
+            right: `${dropdownCoords.right}px`,
+            zIndex: 9999999,
+          }}
+          className="min-w-[280px] sm:min-w-[340px] max-w-[calc(100vw-24px)] bg-[#0c0d14]/98 rounded-2xl border border-white/25 p-3 sm:p-4 shadow-[0_25px_80px_rgba(0,0,0,0.98)] backdrop-blur-3xl animate-scaleIn ring-1 ring-white/10"
+        >
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
             <span className="text-xs font-bold text-bone flex items-center gap-1.5">
               <span>🇮🇳</span>
@@ -148,7 +201,13 @@ export default function LanguageSelector({ value, onChange, compact }: LanguageS
               );
             })}
           </div>
-        </div>
+
+          <div className="mt-2.5 pt-2 border-t border-white/10 text-[11px] text-mist/70 flex items-center justify-between">
+            <span>✨ Live Native Speech</span>
+            <span className="text-cyber font-medium">11 Languages</span>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );
