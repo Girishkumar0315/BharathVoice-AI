@@ -4,17 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import BrandLogo from "@/components/BrandLogo";
-
-const NAV_ITEMS = [
-  { href: "/dashboard", label: "Dashboard", icon: "📊", desc: "Overview & quick actions" },
-  { href: "/services", label: "Explore Services", icon: "🏛️", desc: "Government schemes & welfare" },
-  { href: "/assistant", label: "Voice Assistant", icon: "🎙️", desc: "Talk in your language" },
-  { href: "/profile", label: "My Profile", icon: "👤", desc: "Account & preferences" },
-];
+import { useLanguage } from "@/lib/useLanguage";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
+  const { t } = useLanguage();
+
+  const NAV_ITEMS = [
+    { href: "/dashboard", label: t.navDashboard, icon: "📊", desc: "Overview & quick actions" },
+    { href: "/services", label: t.navServices, icon: "🏛️", desc: "Government schemes & welfare" },
+    { href: "/assistant", label: t.navAssistant, icon: "🎙️", desc: "Talk in your language" },
+    { href: "/profile", label: t.navProfile, icon: "👤", desc: "Account & preferences" },
+  ];
 
   return (
     <aside className="hidden md:flex flex-col w-72 shrink-0 border-r border-white/8 min-h-screen px-5 py-6 gap-6 bg-panel/60 backdrop-blur-2xl relative z-10">

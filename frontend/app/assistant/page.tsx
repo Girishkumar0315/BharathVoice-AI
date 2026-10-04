@@ -12,13 +12,14 @@ import EligibilityFlow from "@/components/EligibilityFlow";
 import BrandLogo from "@/components/BrandLogo";
 import { Language, SourceRef } from "@/lib/types";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/useLanguage";
 
 const LANGUAGE_ONBOARDING_KEY = "bharathvoice_onboarded";
 
 function AssistantContent() {
   const { logout } = useAuth();
   const searchParams = useSearchParams();
-  const [language, setLanguage] = useState<Language>("en");
+  const { language, setLanguage, t } = useLanguage();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [sources, setSources] = useState<SourceRef[]>([]);
   const [followups, setFollowups] = useState<string[]>([]);

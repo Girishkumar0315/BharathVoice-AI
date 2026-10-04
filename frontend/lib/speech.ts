@@ -121,8 +121,17 @@ function cleanTextForSpeech(text: string, language: Language): string {
   return cleaned;
 }
 
+let cachedVoices: SpeechSynthesisVoice[] = [];
+
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  cachedVoices = window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => {
+    cachedVoices = window.speechSynthesis.getVoices();
+  };
+}
+
 /**
- * Scores a browser voice for quality as a fallback.
+ * Scores a browser voice for quality and human naturalness.
  */
 function scoreVoice(v: SpeechSynthesisVoice, language: Language): number {
   const name = v.name.toLowerCase();
@@ -130,34 +139,59 @@ function scoreVoice(v: SpeechSynthesisVoice, language: Language): number {
   const targetLocale = (SPEECH_LOCALES[language] || "en-IN").toLowerCase().replace("_", "-");
   const langPrefix = language.toLowerCase();
 
-  if (!lang.startsWith(langPrefix) && !(language === "en" && lang.startsWith("en"))) return -1;
+  const isExactLocale = lang === targetLocale;
+  const isPrefixLocale = lang.startsWith(langPrefix);
+  const isEnglishFallback = language === "en" && lang.startsWith("en");
+
+  if (!isPrefixLocale && !isEnglishFallback && !isExactLocale) {
+    // Check if the voice name explicitly names the Indian language
+    const langNames: Record<Language, string[]> = {
+      en: ["english", "india", "neerja", "prabhat"],
+      hi: ["hindi", "हिन्दी", "swara", "madhur", "kalpana"],
+      te: ["telugu", "తెలుగు", "mohan", "shruti"],
+      kn: ["kannada", "ಕನ್ನಡ", "gagan", "sapna"],
+      ta: ["tamil", "தமிழ்", "valluvar", "iniya"],
+      mr: ["marathi", "मराठी", "aarohi", "manohar"],
+      bn: ["bengali", "বাংলা", "bangla", "bashkar", "tanishaa"],
+      gu: ["gujarati", "ગુજરાતી", "dhwani", "niranjan"],
+      ml: ["malayalam", "മലയാളം", "midhun", "sobha"],
+      pa: ["punjabi", "ਪੰਜਾਬੀ", "gurmukhi", "harman"],
+      or: ["odia", "ଓଡ଼ିଆ", "oriya"],
+    };
+    const hasNameMatch = (langNames[language] || []).some((n) => name.includes(n));
+    if (!hasNameMatch) return -1;
+  }
 
   let score = 0;
-  if (lang === targetLocale) score += 60;
-  else if (lang.startsWith(langPrefix)) score += 35;
+  if (isExactLocale) score += 100;
+  else if (isPrefixLocale) score += 60;
 
-  if (name.includes("google")) score += 120;
-  if (name.includes("natural") || name.includes("online")) score += 95;
-  if (name.includes("female") || name.includes("heera") || name.includes("neerja") || name.includes("swara")) score += 20;
+  // Prioritize premium, human-like neural voices
+  if (name.includes("natural") || name.includes("online")) score += 180;
+  if (name.includes("neural") || name.includes("hd")) score += 170;
+  if (name.includes("google")) score += 150;
+  if (name.includes("microsoft")) score += 130;
+  if (name.includes("siri") || name.includes("apple")) score += 110;
 
-  if (language === "te" && (name.includes("telugu") || name.includes("mohan") || name.includes("shruti"))) score += 30;
-  if (language === "hi" && (name.includes("hindi") || name.includes("swara") || name.includes("madhur"))) score += 30;
-  if (language === "kn" && (name.includes("kannada") || name.includes("gagan") || name.includes("sapna"))) score += 30;
-  if (language === "ta" && (name.includes("tamil") || name.includes("valluvar") || name.includes("iniya"))) score += 30;
-  if (language === "mr" && (name.includes("marathi") || name.includes("aarohi") || name.includes("manohar"))) score += 30;
-  if (language === "bn" && (name.includes("bengali") || name.includes("bangla") || name.includes("bashkar") || name.includes("tanishaa"))) score += 30;
-  if (language === "gu" && (name.includes("gujarati") || name.includes("dhwani") || name.includes("niranjan"))) score += 30;
-  if (language === "ml" && (name.includes("malayalam") || name.includes("midhun") || name.includes("sobha"))) score += 30;
-  if (language === "pa" && (name.includes("punjabi") || name.includes("gurmukhi") || name.includes("harman"))) score += 30;
-  if (language === "or" && (name.includes("odia") || name.includes("oriya"))) score += 30;
-  if (language === "en" && (name.includes("india") || name.includes("neerja") || name.includes("ravi"))) score += 30;
+  // Preferred fluent regional voice models
+  if (language === "te" && (name.includes("mohan") || name.includes("shruti") || name.includes("telugu"))) score += 60;
+  if (language === "hi" && (name.includes("swara") || name.includes("madhur") || name.includes("hindi"))) score += 60;
+  if (language === "kn" && (name.includes("gagan") || name.includes("sapna") || name.includes("kannada"))) score += 60;
+  if (language === "ta" && (name.includes("valluvar") || name.includes("iniya") || name.includes("tamil"))) score += 60;
+  if (language === "mr" && (name.includes("aarohi") || name.includes("manohar") || name.includes("marathi"))) score += 60;
+  if (language === "bn" && (name.includes("bashkar") || name.includes("tanishaa") || name.includes("bengali"))) score += 60;
+  if (language === "gu" && (name.includes("dhwani") || name.includes("niranjan") || name.includes("gujarati"))) score += 60;
+  if (language === "ml" && (name.includes("midhun") || name.includes("sobha") || name.includes("malayalam"))) score += 60;
+  if (language === "pa" && (name.includes("harman") || name.includes("punjabi"))) score += 60;
+  if (language === "or" && (name.includes("odia") || name.includes("oriya"))) score += 60;
+  if (language === "en" && (name.includes("india") || name.includes("neerja") || name.includes("prabhat"))) score += 60;
 
   return score;
 }
 
-function getMatchingVoice(language: Language): SpeechSynthesisVoice | null {
+export function getMatchingVoice(language: Language): SpeechSynthesisVoice | null {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return null;
-  const voices = window.speechSynthesis.getVoices();
+  const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
   if (!voices || voices.length === 0) return null;
 
   let bestVoice: SpeechSynthesisVoice | null = null;

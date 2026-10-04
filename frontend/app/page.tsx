@@ -6,6 +6,9 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 import { useAuth, saveUser, loginWithCredentials, registerAccount } from "@/lib/auth";
+import { useLanguage } from "@/lib/useLanguage";
+import { ALL_LANGUAGES } from "@/components/LanguageSelector";
+import { speak } from "@/lib/speech";
 
 const PIPELINE = [
   { step: "Speak", desc: "Citizen speaks naturally in their mother tongue (Telugu, Hindi, Kannada, English)" },
@@ -19,6 +22,7 @@ const PIPELINE = [
 
 export default function LandingPage() {
   const { user, isLoggedIn, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   
   // Auth Form State
   const [authTab, setAuthTab] = useState<"login" | "signup">("login");
@@ -243,34 +247,53 @@ export default function LandingPage() {
 
                   <p className="text-base sm:text-lg text-mist max-w-2xl mx-auto leading-relaxed font-light">
                     Voice-first citizen intelligence designed to empower every Indian. Access verified student scholarships, 
-                    farmer income support, healthcare coverage, and government welfare in your mother tongue — 
-                    <strong className="text-bone font-medium"> Telugu, Hindi, Kannada, or English</strong>.
+                    farmer income support, healthcare coverage, and government welfare in your mother tongue in{" "}
+                    <strong className="text-bone font-medium">11 Indian Languages</strong>.
                   </p>
 
-                  {/* Languages Supported */}
-                  <div className="flex flex-wrap justify-center gap-3 pt-2 max-w-lg mx-auto">
-                    {[
-                      { label: "Telugu", native: "తెలుగు" },
-                      { label: "Hindi", native: "हिन्दी" },
-                      { label: "Kannada", native: "ಕನ್ನಡ" },
-                      { label: "English", native: "English" },
-                    ].map((l) => (
-                      <div key={l.label} className="glass px-4 py-2 rounded-xl text-center border border-white/10 hover:border-saffron/30 transition-all min-w-[90px]">
-                        <div className="text-xs font-bold text-bone">{l.native}</div>
-                        <div className="text-[10px] text-mist">{l.label}</div>
-                      </div>
-                    ))}
+                  {/* Languages Supported - All 11 Indian Languages from Chat */}
+                  <div className="w-full max-w-3xl mx-auto pt-2">
+                    <div className="text-xs font-semibold text-mist uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+                      <span>🇮🇳</span>
+                      <span>{t.heroSupportedTitle} ({ALL_LANGUAGES.length} Languages)</span>
+                    </div>
+
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
+                      {ALL_LANGUAGES.map((l) => {
+                        const isActive = language === l.code;
+                        return (
+                          <button
+                            key={l.code}
+                            type="button"
+                            onClick={() => {
+                              setLanguage(l.code);
+                              speak(t.heroSpeakingGreeting, l.code);
+                            }}
+                            className={`px-3.5 py-2 rounded-xl text-center border transition-all cursor-pointer active:scale-95 flex items-center gap-2 ${
+                              isActive
+                                ? "bg-gradient-to-r from-saffron/30 via-gulal/20 to-amethyst/30 border-saffron text-bone shadow-glow scale-105"
+                                : "glass border-white/10 hover:border-saffron/40 hover:bg-white/10 text-mist hover:text-bone"
+                            }`}
+                            title={`Switch website to ${l.label} and speak`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-saffron animate-pulse" : "bg-white/30"}`} />
+                            <span className="text-xs font-bold text-bone">{l.native}</span>
+                            <span className="text-[10px] text-mist/70">({l.label})</span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-4 pt-2 text-xs text-mist flex-wrap">
+                  <div className="flex items-center justify-center gap-4 pt-3 text-xs text-mist flex-wrap">
                     <span className="flex items-center gap-1.5">
-                      <span className="text-cyber font-bold">✓</span> Sub-second Voice Reply
+                      <span className="text-cyber font-bold">✓</span> {t.featVoiceReply}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="text-cyber font-bold">✓</span> 100% Grounded Official Sources
+                      <span className="text-cyber font-bold">✓</span> {t.featVerifiedSources}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <span className="text-cyber font-bold">✓</span> Zero English Required
+                      <span className="text-cyber font-bold">✓</span> {t.featZeroEnglish}
                     </span>
                   </div>
                 </div>
@@ -317,6 +340,9 @@ export default function LandingPage() {
                 </div>
               </div>
             </section>
+
+            {/* Interactive 3D Voice Orb & Neural Globe Showcase */}
+            <HeroSection />
 
             {/* =========================================================================
                 AUTH MODAL DIALOG (Google OAuth, Username/Password & Signup)

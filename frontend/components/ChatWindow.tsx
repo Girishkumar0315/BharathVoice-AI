@@ -82,6 +82,53 @@ const SUGGESTED_QUESTIONS: Record<Language, string[]> = {
   ],
 };
 
+const WELCOME_TITLES: Record<Language, { title: string; desc: string }> = {
+  en: {
+    title: "How Can BharathVoice Assist You?",
+    desc: "Tap the microphone 🎙️ below to speak, or type your query in your language. BharathVoice understands your intent and provides step-by-step eligibility, documents, and benefits with live voice responses.",
+  },
+  te: {
+    title: "భారతవాయిస్ మీకు ఎలా సహాయపడగలదు?",
+    desc: "మాట్లాడటానికి క్రింది మైక్రోఫోన్ 🎙️ నొక్కండి, లేదా మీ భాషలో ప్రశ్నను టైప్ చేయండి. భారతవాయిస్ మీ అవసరాన్ని అర్థం చేసుకుని అర్హతలు మరియు ప్రయోజనాలను వివరిస్తుంది.",
+  },
+  hi: {
+    title: "भारतवॉयस आपकी किस प्रकार सहायता कर सकता है?",
+    desc: "बोलने के लिए नीचे दिए गए माइक्रोफ़ोन 🎙️ पर टैप करें, या अपनी भाषा में टाइप करें। भारतवॉयस आपकी आवश्यकता समझकर सटीक योजना मार्गदर्शन प्रदान करता है।",
+  },
+  kn: {
+    title: "ಭಾರತವಾಯ್ಸ್ ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?",
+    desc: "ಮಾತನಾಡಲು ಕೆಳಗಿನ ಮೈಕ್ರೊಫೋನ್ 🎙️ ಅನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ, ಅಥವಾ ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ. ಅಧಿಕೃತ ಯೋಜನೆಗಳ ಮಾಹಿತಿ ಲಭ್ಯವಿದೆ.",
+  },
+  ta: {
+    title: "பாரத்வாய்ஸ் உங்களுக்கு எவ்வாறு உதவ முடியும்?",
+    desc: "பேச கீழே உள்ள மைக்ரோஃபோனை 🎙️ தொடவும், அல்லது உங்கள் மொழியில் தட்டச்சு செய்யவும். நேரலை குரல்வழி பதில்களைப் பெறுங்கள்.",
+  },
+  mr: {
+    title: "भारतव्हॉइस तुम्हाला कशी मदत करू शकतो?",
+    desc: "बोलण्यासाठी खालील मायक्रोफोन 🎙️ वर टॅप करा किंवा आपल्या भाषेत टाईप करा. अचूक योजना माहिती मिळवा.",
+  },
+  bn: {
+    title: "ভারতভয়েস আপনাকে কীভাবে সাহায্য করতে পারে?",
+    desc: "কথা বলতে নিচের মাইক্রোফোনে 🎙️ আলতো চাপুন, অথবা আপনার ভাষায় টাইপ করুন। সরকারি প্রকল্পের সঠিক তথ্য পান।",
+  },
+  gu: {
+    title: "ભારતવોઇસ તમને કેવી રીતે મદદ કરી શકે?",
+    desc: "બોલવા માટે નીચેના માઇક્રોફોન 🎙️ પર ટેપ કરો, અથવા તમારી ભાષામાં ટાઇપ કરો. ત્વરિત સરકારી માર્ગદર્શન મેળવો.",
+  },
+  ml: {
+    title: "ഭാരത്വോയ്സ് നിങ്ങളെ എങ്ങനെ സഹായിക്കും?",
+    desc: "സംസാരിക്കാൻ താഴെയുള്ള മൈക്രോഫോൺ 🎙️ ടാപ്പ് ചെയ്യുക, അല്ലെങ്കിൽ നിങ്ങളുടെ ഭാಷയിൽ ടൈപ്പ് ചെയ്യുക. സർക്കാർ ആനുകൂല്യങ്ങൾ അറിയൂ.",
+  },
+  pa: {
+    title: "ਭਾਰਤਵਾਇਸ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹੈ?",
+    desc: "ਬੋਲਣ ਲਈ ਹੇਠਾਂ ਦਿੱਤੇ ਮਾਈਕ੍ਰੋਫੋਨ 🎙️ 'ਤੇ ਟੈਪ ਕਰੋ ਜਾਂ ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ ਟਾਈਪ ਕਰੋ। ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਦੀ ਪੂਰੀ ਜਾਣਕਾਰੀ ਲਵੋ।",
+  },
+  or: {
+    title: "ଭାରତଭଏସ୍ ଆପଣଙ୍କୁ କିପରି ସାହାଯ୍ୟ କରିପାରିବ?",
+    desc: "କହିବା ପାଇଁ ତଳେ ଥିବା ମାଇକ୍ରୋଫୋନ୍ 🎙️ ଟ୍ୟାପ୍ କରନ୍ତୁ, କିମ୍ବା ନିଜ ଭାଷାରେ ଟାଇପ୍ କରନ୍ତୁ। ସରକାରୀ ଯୋଜନାର ସଠିକ୍ ମାର୍ଗଦର୍ଶନ ପାଆନ୍ତୁ।",
+  },
+};
+
 interface ChatWindowProps {
   language: Language;
   externalQuery?: { text: string; nonce: number } | null;
@@ -246,11 +293,10 @@ export default function ChatWindow({ language, externalQuery, onSourcesChange, o
             <AIOrb state={assistantState} size="md" />
             <div className="space-y-1.5 px-3">
               <h2 className="font-display text-lg sm:text-2xl font-bold text-bone">
-                How Can BharathVoice Assist You?
+                {(WELCOME_TITLES[language] || WELCOME_TITLES.en).title}
               </h2>
               <p className="text-xs sm:text-sm text-mist/90 leading-relaxed max-w-md mx-auto">
-                Tap the microphone 🎙️ below to speak, or type your query in your language. 
-                BharathVoice understands your intent and provides step-by-step eligibility, documents, and benefits with live voice responses.
+                {(WELCOME_TITLES[language] || WELCOME_TITLES.en).desc}
               </p>
             </div>
             
