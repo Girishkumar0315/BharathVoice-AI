@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 import BrandLogo from "@/components/BrandLogo";
+import { useLanguage } from "@/lib/useLanguage";
 
 export default function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 glass backdrop-blur-2xl border-b border-white/10 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
@@ -26,7 +28,7 @@ export default function Navbar() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-white/15 text-xs font-semibold text-bone hover:border-saffron/50 hover:bg-white/5 active:scale-95 transition-all shadow-sm"
               >
                 <span>🏠</span>
-                <span className="hidden sm:inline">Home</span>
+                <span className="hidden sm:inline">{t.navHome}</span>
               </Link>
 
               {/* Profile badge */}
@@ -52,7 +54,7 @@ export default function Navbar() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-red-500/20 text-xs font-semibold text-red-200 hover:bg-red-500/10 hover:border-red-500/40 active:scale-95 transition-all cursor-pointer shadow-sm"
               >
                 <span>🚪</span>
-                <span className="hidden sm:inline">Sign Out</span>
+                <span className="hidden sm:inline">{t.navSignOut}</span>
               </button>
             </>
           ) : (
@@ -63,7 +65,7 @@ export default function Navbar() {
                 className="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-full glass border border-white/15 text-xs font-semibold text-bone hover:border-saffron/50 hover:bg-white/5 active:scale-95 transition-all"
               >
                 <span>🏠</span>
-                <span>Home</span>
+                <span>{t.navHome}</span>
               </Link>
 
               <button
@@ -79,7 +81,7 @@ export default function Navbar() {
                 }}
                 className="text-xs font-semibold text-white bg-gradient-to-r from-saffron to-gulal px-4 py-1.5 rounded-full shadow-glow hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
               >
-                <span>Sign In</span>
+                <span>{t.navSignIn}</span>
                 <span>→</span>
               </button>
             </>

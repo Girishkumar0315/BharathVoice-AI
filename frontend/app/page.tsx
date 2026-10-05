@@ -6,10 +6,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth, saveUser, loginWithCredentials, registerAccount } from "@/lib/auth";
 import { useLanguage } from "@/lib/useLanguage";
+import { ALL_LANGUAGES } from "@/components/LanguageSelector";
 
 export default function LandingPage() {
   const { user, isLoggedIn, logout } = useAuth();
-  const { t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   
   // Auth Form State
   const [authTab, setAuthTab] = useState<"login" | "signup">("login");
@@ -225,7 +226,7 @@ export default function LandingPage() {
                 <div className="text-center space-y-5 max-w-3xl mx-auto">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-saffron/30 text-xs text-bone shadow-glow">
                     <span className="w-2 h-2 rounded-full bg-saffron animate-pulse" />
-                    <span>AI for Bharat in Indian Languages</span>
+                    <span>{t.heroBadge}</span>
                   </div>
 
                   <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight text-center">
@@ -233,11 +234,44 @@ export default function LandingPage() {
                   </h1>
 
                   <p className="text-base sm:text-lg text-mist max-w-2xl mx-auto leading-relaxed font-light">
-                    Voice-first citizen intelligence designed to empower every Indian. Access verified government welfare schemes, scholarships, healthcare coverage, and farmer support — all in your mother tongue.
+                    {t.heroDescription || "Voice-first citizen intelligence designed to empower every Indian. Access verified government welfare schemes, scholarships, healthcare coverage, and farmer support — all in your mother tongue."}
                   </p>
+
+                  {/* Languages Supported - All 11 Indian Languages */}
+                  <div className="w-full max-w-3xl mx-auto pt-3">
+                    <div className="text-xs font-semibold text-mist uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+                      <span>🇮🇳</span>
+                      <span>{t.heroSupportedTitle} ({ALL_LANGUAGES.length} {t.statLanguages})</span>
+                    </div>
+
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
+                      {ALL_LANGUAGES.map((l) => {
+                        const isActive = language === l.code;
+                        return (
+                          <button
+                            key={l.code}
+                            type="button"
+                            onClick={() => {
+                              setLanguage(l.code);
+                            }}
+                            className={`px-3.5 py-2 rounded-xl text-center border transition-all cursor-pointer active:scale-95 flex items-center gap-2 ${
+                              isActive
+                                ? "bg-gradient-to-r from-saffron/30 via-gulal/20 to-amethyst/30 border-saffron text-bone shadow-glow scale-105"
+                                : "glass border-white/10 hover:border-saffron/40 hover:bg-white/10 text-mist hover:text-bone"
+                            }`}
+                            title={`Switch website to ${l.label}`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-saffron animate-pulse" : "bg-white/30"}`} />
+                            <span className="text-xs font-bold text-bone">{l.native}</span>
+                            <span className="text-[10px] text-mist/70">({l.label})</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Down Center: High-Impact Action Buttons (in place of big pages/forms) */}
+                {/* Down Center: High-Impact Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full max-w-md mx-auto">
                   <button
                     type="button"
@@ -248,7 +282,7 @@ export default function LandingPage() {
                     }}
                     className="w-full sm:w-auto px-9 py-4 rounded-full bg-gradient-to-r from-saffron via-gulal to-amethyst text-white font-bold text-sm shadow-glow hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2.5 min-w-[200px] group cursor-pointer"
                   >
-                    <span>Sign In</span>
+                    <span>{t.btnSignIn || t.navSignIn || "Sign In"}</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
 
@@ -261,7 +295,7 @@ export default function LandingPage() {
                     }}
                     className="w-full sm:w-auto px-9 py-4 rounded-full glass border border-white/20 text-bone hover:border-saffron/40 hover:bg-white/5 font-bold text-sm shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[200px] cursor-pointer"
                   >
-                    <span>Create Account</span>
+                    <span>{t.btnCreateAccount || "Create Account"}</span>
                     <span className="text-saffron font-bold">+</span>
                   </button>
                 </div>
@@ -273,22 +307,24 @@ export default function LandingPage() {
                     onClick={handleGuestLogin}
                     className="text-xs text-mist hover:text-saffron transition-colors inline-flex items-center gap-1.5 font-medium cursor-pointer"
                   >
-                    <span>🚀 Instant Guest Demo (One-click)</span>
+                    <span>{t.btnGuestDemo || "🚀 Instant Guest Demo (One-click)"}</span>
                     <span>→</span>
                   </button>
                 </div>
 
                 {/* Features Highlight Section */}
                 <div className="mt-14 w-full max-w-3xl mx-auto">
-                  <p className="text-[11px] uppercase tracking-widest text-mist/50 text-center mb-5 font-semibold">What BharathVoice AI Offers</p>
+                  <p className="text-[11px] uppercase tracking-widest text-mist/50 text-center mb-5 font-semibold">
+                    {t.featuresHeading || "What BharathVoice AI Offers"}
+                  </p>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {[
-                      { icon: "🎙️", title: "Voice-First Interaction", desc: "Speak naturally in your mother tongue — no English or typing needed." },
-                      { icon: "🏛️", title: "Government Schemes", desc: "Instant access to PM-KISAN, Ayushman Bharat, PMAY, Scholarships & more." },
-                      { icon: "🛡️", title: "100% Verified Data", desc: "All answers grounded in official government registries — zero hallucinations." },
-                      { icon: "🌐", title: "11 Indian Languages", desc: "Telugu, Hindi, Kannada, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi & more." },
-                      { icon: "⚡", title: "Sub-Second Responses", desc: "FAISS-powered RAG pipeline delivers accurate answers in under 300ms." },
-                      { icon: "📄", title: "Document Eligibility Check", desc: "Upload your documents and instantly verify scheme eligibility & requirements." },
+                      { icon: "🎙️", title: t.featVoiceTitle || "Voice-First Interaction", desc: t.featVoiceDesc || "Speak naturally in your mother tongue — no English or typing needed." },
+                      { icon: "🏛️", title: t.featSchemesTitle || "Government Schemes", desc: t.featSchemesDesc || "Instant access to PM-KISAN, Ayushman Bharat, PMAY, Scholarships & more." },
+                      { icon: "🛡️", title: t.featVerifiedTitle || "100% Verified Data", desc: t.featVerifiedDesc || "All answers grounded in official government registries — zero hallucinations." },
+                      { icon: "🌐", title: t.featLanguagesTitle || "11 Indian Languages", desc: t.featLanguagesDesc || "Telugu, Hindi, Kannada, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi & more." },
+                      { icon: "⚡", title: t.featSpeedTitle || "Sub-Second Responses", desc: t.featSpeedDesc || "FAISS-powered RAG pipeline delivers accurate answers in under 300ms." },
+                      { icon: "📄", title: t.featDocsTitle || "Document Eligibility Check", desc: t.featDocsDesc || "Upload your documents and instantly verify scheme eligibility & requirements." },
                     ].map((f) => (
                       <div key={f.title} className="glass rounded-2xl p-4 border border-white/8 hover:border-saffron/25 transition-all text-left group">
                         <span className="text-xl mb-2 block group-hover:scale-110 transition-transform duration-200 w-fit">{f.icon}</span>
@@ -545,27 +581,49 @@ export default function LandingPage() {
              ========================================================================= */
           <div>
             <section className="min-h-[75vh] flex items-center justify-center px-4">
-              <div className="max-w-2xl mx-auto text-center space-y-8">
+              <div className="max-w-2xl mx-auto text-center space-y-7">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-saffron/30 text-xs text-saffron font-semibold mb-4">
                     <span className="w-1.5 h-1.5 rounded-full bg-saffron animate-pulse" />
-                    <span>Citizen Workspace Ready</span>
+                    <span>{t.workspaceReady || "Citizen Workspace Ready"}</span>
                   </div>
                   <h1 className="font-display text-3xl sm:text-5xl font-black tracking-tight mb-3">
-                    Welcome, <span className="text-gradient">{user?.name || "Citizen"}</span>
+                    {t.welcomeCitizen || "Welcome"}, <span className="text-gradient">{user?.name || "Citizen"}</span>
                   </h1>
                   <p className="text-mist text-base max-w-lg mx-auto">
-                    Your citizen workspace is ready. Explore government services, talk to the AI assistant, or manage your profile.
+                    {t.workspaceSubtitle || "Your citizen workspace is ready. Explore government services, talk to the AI assistant, or manage your profile."}
                   </p>
+
+                  {/* Language Selector Buttons for logged in citizens */}
+                  <div className="flex flex-wrap justify-center gap-2 mt-5 max-w-xl mx-auto">
+                    {ALL_LANGUAGES.map((l) => {
+                      const isActive = language === l.code;
+                      return (
+                        <button
+                          key={l.code}
+                          type="button"
+                          onClick={() => setLanguage(l.code)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer active:scale-95 ${
+                            isActive
+                              ? "bg-gradient-to-r from-saffron/30 via-gulal/20 to-amethyst/30 border-saffron text-bone shadow-glow scale-105"
+                              : "glass border-white/10 hover:border-saffron/40 hover:bg-white/10 text-mist hover:text-bone"
+                          }`}
+                        >
+                          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${isActive ? "bg-saffron animate-pulse" : "bg-white/30"}`} />
+                          <span>{l.native}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Quick Navigation Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-2xl mx-auto">
                   {[
-                    { href: "/dashboard", icon: "📊", label: "Dashboard", desc: "Overview & metrics", color: "hover:border-saffron/40 hover:shadow-glow" },
-                    { href: "/services", icon: "🏛️", label: "Explore Services", desc: "Verified schemes", color: "hover:border-gulal/40 hover:shadow-glowPink" },
-                    { href: "/assistant", icon: "🎙️", label: "Voice Assistant", desc: "Speak in mother tongue", color: "hover:border-neon/40 hover:shadow-glowCyan" },
-                    { href: "/profile", icon: "👤", label: "My Profile", desc: "Citizen preferences", color: "hover:border-amethyst/40 hover:shadow-glowPurple" },
+                    { href: "/dashboard", icon: "📊", label: t.navDashboard || "Dashboard", desc: t.dashSubtitle || "Overview & metrics", color: "hover:border-saffron/40 hover:shadow-glow" },
+                    { href: "/services", icon: "🏛️", label: t.navServices || "Explore Services", desc: t.dashSchemesTitle || "Verified schemes", color: "hover:border-gulal/40 hover:shadow-glowPink" },
+                    { href: "/assistant", icon: "🎙️", label: t.navAssistant || "Voice Assistant", desc: t.heroTagline || "Speak in mother tongue", color: "hover:border-neon/40 hover:shadow-glowCyan" },
+                    { href: "/profile", icon: "👤", label: t.navProfile || "My Profile", desc: t.dashProfileTitle || "Citizen preferences", color: "hover:border-amethyst/40 hover:shadow-glowPurple" },
                   ].map((item) => (
                     <Link
                       key={item.href}
@@ -585,7 +643,7 @@ export default function LandingPage() {
                     href="/dashboard"
                     className="inline-flex items-center gap-2 px-9 py-3.5 rounded-full bg-gradient-to-r from-saffron via-gulal to-amethyst text-white font-bold text-sm shadow-masterpiece hover:scale-105 active:scale-95 transition-all duration-300"
                   >
-                    <span>Enter Citizen Workspace</span>
+                    <span>{t.btnEnterWorkspace || "Enter Citizen Workspace"}</span>
                     <span>→</span>
                   </Link>
                 </div>

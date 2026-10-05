@@ -17,6 +17,7 @@ export interface SiteTranslation {
   // Hero Section
   heroBadge: string;
   heroTagline: string;
+  heroDescription?: string;
   heroCtaTalk: string;
   heroCtaAbout: string;
   heroSupportedTitle: string;
@@ -26,6 +27,28 @@ export interface SiteTranslation {
   heroGlobeBtn: string;
   heroPronunciationTitle: string;
   heroSpeakingGreeting: string;
+
+  // Launch Page Extras
+  btnSignIn?: string;
+  btnCreateAccount?: string;
+  btnGuestDemo?: string;
+  featuresHeading?: string;
+  featVoiceTitle?: string;
+  featVoiceDesc?: string;
+  featSchemesTitle?: string;
+  featSchemesDesc?: string;
+  featVerifiedTitle?: string;
+  featVerifiedDesc?: string;
+  featLanguagesTitle?: string;
+  featLanguagesDesc?: string;
+  featSpeedTitle?: string;
+  featSpeedDesc?: string;
+  featDocsTitle?: string;
+  featDocsDesc?: string;
+  workspaceReady?: string;
+  welcomeCitizen?: string;
+  workspaceSubtitle?: string;
+  btnEnterWorkspace?: string;
 
   // Stats
   statLanguages: string;
@@ -788,6 +811,286 @@ export const SITE_DICTIONARY: Record<Language, SiteTranslation> = {
   },
 };
 
+export const LAUNCH_PAGE_TRANSLATIONS: Record<Language, {
+  heroDescription: string;
+  btnSignIn: string;
+  btnCreateAccount: string;
+  btnGuestDemo: string;
+  featuresHeading: string;
+  featVoiceTitle: string;
+  featVoiceDesc: string;
+  featSchemesTitle: string;
+  featSchemesDesc: string;
+  featVerifiedTitle: string;
+  featVerifiedDesc: string;
+  featLanguagesTitle: string;
+  featLanguagesDesc: string;
+  featSpeedTitle: string;
+  featSpeedDesc: string;
+  featDocsTitle: string;
+  featDocsDesc: string;
+  workspaceReady: string;
+  welcomeCitizen: string;
+  workspaceSubtitle: string;
+  btnEnterWorkspace: string;
+}> = {
+  en: {
+    heroDescription: "Voice-first citizen intelligence designed to empower every Indian. Access verified government welfare schemes, scholarships, healthcare coverage, and farmer support — all in your mother tongue.",
+    btnSignIn: "Sign In",
+    btnCreateAccount: "Create Account",
+    btnGuestDemo: "🚀 Instant Guest Demo (One-click)",
+    featuresHeading: "What BharathVoice AI Offers",
+    featVoiceTitle: "Voice-First Interaction",
+    featVoiceDesc: "Speak naturally in your mother tongue — no English or typing needed.",
+    featSchemesTitle: "Government Schemes",
+    featSchemesDesc: "Instant access to PM-KISAN, Ayushman Bharat, PMAY, Scholarships & more.",
+    featVerifiedTitle: "100% Verified Data",
+    featVerifiedDesc: "All answers grounded in official government registries — zero hallucinations.",
+    featLanguagesTitle: "11 Indian Languages",
+    featLanguagesDesc: "Telugu, Hindi, Kannada, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi & more.",
+    featSpeedTitle: "Sub-Second Responses",
+    featSpeedDesc: "FAISS-powered RAG pipeline delivers accurate answers in under 300ms.",
+    featDocsTitle: "Document Eligibility Check",
+    featDocsDesc: "Upload your documents and instantly verify scheme eligibility & requirements.",
+    workspaceReady: "Citizen Workspace Ready",
+    welcomeCitizen: "Welcome",
+    workspaceSubtitle: "Your citizen workspace is ready. Explore government services, talk to the AI assistant, or manage your profile.",
+    btnEnterWorkspace: "Enter Citizen Workspace",
+  },
+  te: {
+    heroDescription: "ప్రతి భారతీయ పౌరుడికి సాధికారత చేకూర్చే వాయిస్-ఫస్ట్ ఇంటెలిజెన్స్. మీ మాతృభాషలోనే ధృవీకరించిన ప్రభుత్వ సంక్షేమ పథకాలు, స్కాలర్‌షిప్‌లు, ఉచిత వైద్యం మరియు రైతు సహాయాన్ని సులభంగా పొందండి.",
+    btnSignIn: "సైన్ ఇన్",
+    btnCreateAccount: "ఖాతా సృష్టించండి",
+    btnGuestDemo: "🚀 తక్షణ ఉచిత డెమో (ఒక్క క్లిక్‌తో)",
+    featuresHeading: "భారతవాయిస్ AI అందించే విశేష సేవలు",
+    featVoiceTitle: "సహజ వాయిస్ సంభాషణ",
+    featVoiceDesc: "మీ సొంత భాషలోనే మాట్లాడండి — ఇంగ్లీష్ లేదా టైపింగ్ అవసరం లేదు.",
+    featSchemesTitle: "ప్రభుత్వ సంక్షేమ పథకాలు",
+    featSchemesDesc: "పీఎం కిసాన్, ఆయుష్మాన్ భారత్, స్కాలర్‌షిప్‌లు మరియు రుణ సమాచారం తక్షణమే.",
+    featVerifiedTitle: "100% అధికారిక సమాచారం",
+    featVerifiedDesc: "అన్ని సమాధానాలు ప్రభుత్వ అధికారిక పోర్టల్స్ ద్వారా ధృవీకరించబడినవి.",
+    featLanguagesTitle: "11 భారతీయ భాషలు",
+    featLanguagesDesc: "తెలుగు, హిందీ, కన్నడ, తమిళం, మరాఠీ, బెంగాలీ, గుజరాతీ మరియు మరిన్ని.",
+    featSpeedTitle: "క్షణాల్లో సమాధానం",
+    featSpeedDesc: "అత్యాధునిక RAG సాంకేతికతతో 300 మిల్లీసెకన్లలోపు ఖచ్చితమైన జవాబులు.",
+    featDocsTitle: "పత్రాల అర్హత పరిశీలన",
+    featDocsDesc: "మీ పత్రాలను పరిశీలించి ఏయే పథకాలకు అర్హులో క్షణాల్లో తెలుసుకోండి.",
+    workspaceReady: "పౌర వర్క్‌స్పేస్ సిద్ధంగా ఉంది",
+    welcomeCitizen: "స్వాగతం",
+    workspaceSubtitle: "మీ పౌర వర్క్‌స్పేస్ సిద్ధంగా ఉంది. ప్రభుత్వ సేవలను అన్వేషించండి మరియు అసిస్టెంట్‌తో మాట్లాడండి.",
+    btnEnterWorkspace: "వర్క్‌స్పేస్‌లోకి ప్రవేశించండి",
+  },
+  hi: {
+    heroDescription: "हर भारतीय नागरिक को सशक्त बनाने वाली वॉइस-फर्स्ट इंटेलिजेंस। अपनी मातृभाषा में सत्यापित सरकारी कल्याणकारी योजनाएं, छात्रवृत्ति, स्वास्थ्य सुरक्षा और किसान सहायता प्राप्त करें।",
+    btnSignIn: "साइन इन",
+    btnCreateAccount: "खाता बनाएं",
+    btnGuestDemo: "🚀 त्वरित गेस्ट डेमो (एक क्लिक में)",
+    featuresHeading: "भारतवॉयस AI की प्रमुख विशेषताएं",
+    featVoiceTitle: "वॉइस-फर्स्ट इंटरैक्शन",
+    featVoiceDesc: "अपनी मातृभाषा में बोलें — अंग्रेजी या टाइपिंग की कोई आवश्यकता नहीं।",
+    featSchemesTitle: "सरकारी योजनाएं",
+    featSchemesDesc: "पीएम किसान, आयुष्मान भारत, छात्रवृत्ति और आवास योजनाओं की त्वरित जानकारी।",
+    featVerifiedTitle: "100% सत्यापित डेटा",
+    featVerifiedDesc: "सभी उत्तर आधिकारिक सरकारी रिकॉर्ड से प्रमाणित — शत-प्रतिशत सटीक।",
+    featLanguagesTitle: "11 भारतीय भाषाएं",
+    featLanguagesDesc: "हिन्दी, तेलुगु, कन्नड़, तमिल, मराठी, बांग्ला, गुजराती, मलयालम और अन्य।",
+    featSpeedTitle: "त्वरित प्रतिक्रिया",
+    featSpeedDesc: "300 मिलीसेकंड से भी कम समय में सटीक और स्पष्ट उत्तर।",
+    featDocsTitle: "दस्तावेज़ पात्रता जांच",
+    featDocsDesc: "अपने दस्तावेज़ों की जांच कर तुरंत जानें कि आप किन योजनाओं के लिए पात्र हैं।",
+    workspaceReady: "नागरिक कार्यक्षेत्र तैयार है",
+    welcomeCitizen: "स्वागत है",
+    workspaceSubtitle: "आपका नागरिक कार्यक्षेत्र तैयार है। सरकारी सेवाओं को देखें या वॉइस असिस्टेंट से बात करें।",
+    btnEnterWorkspace: "नागरिक कार्यक्षेत्र में जाएं",
+  },
+  kn: {
+    heroDescription: "ಪ್ರತಿಯೊಬ್ಬ ಭಾರತೀಯ ನಾಗರಿಕರಿಗೂ ಧ್ವನಿ ಆಧಾರಿತ ಸೌಲಭ್ಯ. ನಿಮ್ಮ ಮಾತೃಭಾಷೆಯಲ್ಲೇ ಅಧಿಕೃತ ಸರ್ಕಾರಿ ಕಲ್ಯಾಣ ಯೋಜನೆಗಳು, ವಿದ್ಯಾರ್ಥಿವೇತನ, ಆರೋಗ್ಯ ರಕ್ಷಣೆ ಮತ್ತು ಕೃಷಿ ಸಹಾಯವನ್ನು ಸುಲಭವಾಗಿ ಪಡೆಯಿರಿ.",
+    btnSignIn: "ಸೈನ್ ಇನ್",
+    btnCreateAccount: "ಖಾತೆ ರಚಿಸಿ",
+    btnGuestDemo: "🚀 ತಕ್ಷಣದ ಡೆಮೊ (ಒಂದು ಕ್ಲಿಕ್)",
+    featuresHeading: "ಭಾರತವಾಯ್ಸ್ AI ನೀಡುವ ಪ್ರಮುಖ ಸೌಲಭ್ಯಗಳು",
+    featVoiceTitle: "ಧ್ವನಿ ಸಂಭಾಷಣೆ",
+    featVoiceDesc: "ನಿಮ್ಮ ಮಾತೃಭಾಷೆಯಲ್ಲಿ ಸಹಜವಾಗಿ ಮಾತನಾಡಿ — ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಟೈಪಿಂಗ್ ಅಗತ್ಯವಿಲ್ಲ.",
+    featSchemesTitle: "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
+    featSchemesDesc: "ಪಿಎಂ ಕಿಸಾನ್, ಆಯುಷ್ಮಾನ್ ಭಾರತ್, ವಿದ್ಯಾರ್ಥಿವೇತನ ಮತ್ತು ಗೃಹ ಯೋಜನೆಗಳು.",
+    featVerifiedTitle: "100% ಅಧಿಕೃತ ಮಾಹಿತಿ",
+    featVerifiedDesc: "ಸರ್ಕಾರದ ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗಳಿಂದ ದೃಢೀಕರಿಸಲ್ಪಟ್ಟ ನಿಖರ ಮಾಹಿತಿ.",
+    featLanguagesTitle: "11 ಭಾರತೀಯ ಭಾಷೆಗಳು",
+    featLanguagesDesc: "ಕನ್ನಡ, ತೆಲುಗು, ಹಿಂದಿ, ತಮಿಳು, ಮರಾಠಿ, ಬೆಂಗಾಲಿ, ಗುಜರಾತಿ ಮತ್ತು ಇತರ ಭಾಷೆಗಳು.",
+    featSpeedTitle: "ಕ್ಷಣಾರ್ಧದಲ್ಲಿ ಉತ್ತರ",
+    featSpeedDesc: "ವೇಗದ RAG ತಂತ್ರಜ್ಞಾನದೊಂದಿಗೆ ಕ್ಷಣಾರ್ಧದಲ್ಲಿ ನಿಖರ ಧ್ವನಿ ಉತ್ತರ.",
+    featDocsTitle: "ದಾಖಲೆಗಳ ಅರ್ಹತಾ ಪರಿಶೀಲನೆ",
+    featDocsDesc: "ನಿಮ್ಮ ದಾಖಲೆಗಳೊಂದಿಗೆ ಯೋಜನೆಗಳ ಅರ್ಹತೆಯನ್ನು ತಕ್ಷಣವೇ ಪರಿಶೀಲಿಸಿ.",
+    workspaceReady: "ನಾಗರಿಕ ವರ್ಕ್‌ಸ್ಪೇಸ್ ಸಿದ್ಧವಾಗಿದೆ",
+    welcomeCitizen: "ಸ್ವಾಗತ",
+    workspaceSubtitle: "ನಿಮ್ಮ ವರ್ಕ್‌ಸ್ಪೇಸ್ ಸಿದ್ಧವಾಗಿದೆ. ಸರ್ಕಾರಿ ಯೋಜನೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ ಅಥವಾ ಸಹಾಯಕನೊಂದಿಗೆ ಮಾತನಾಡಿ.",
+    btnEnterWorkspace: "ವರ್ಕ್‌ಸ್ಪೇಸ್ ಪ್ರವೇಶಿಸಿ",
+  },
+  ta: {
+    heroDescription: "ஒவ்வொரு இந்திய குடிமகனுக்கும் அதிகாரமளிக்கும் குரல்வழி நுண்ணறிவு. உங்கள் தாய்மொழியிலேயே அரசு நலத்திட்டங்கள், கல்வி உதவித்தொகை மற்றும் விவசாய ஆதரவை பெறுங்கள்.",
+    btnSignIn: "உள்நுழைக",
+    btnCreateAccount: "கணக்கு தொடங்க",
+    btnGuestDemo: "🚀 உடனடி டெமோ (ஒரே கிளிக்கில்)",
+    featuresHeading: "பாரத்வாய்ஸ் AI வழங்கும் சிறப்பம்சங்கள்",
+    featVoiceTitle: "குரல்வழி உரையாடல்",
+    featVoiceDesc: "உங்கள் தாய்மொழியில் பேசுங்கள் — ஆங்கிலம் அல்லது தட்டச்சு தேவையில்லை.",
+    featSchemesTitle: "அரசு நலத்திட்டங்கள்",
+    featSchemesDesc: "பி.எம் கிசான், ஆயுஷ்மான் பாரத் மற்றும் கல்வி உதவித்தொகை தகவல்கள்.",
+    featVerifiedTitle: "100% சரிபார்க்கப்பட்ட தகவல்",
+    featVerifiedDesc: "அரசு இணையதளங்களில் இருந்து நேரடியாக சரிபார்க்கப்பட்ட உண்மையான தகவல்கள்.",
+    featLanguagesTitle: "11 இந்திய மொழிகள்",
+    featLanguagesDesc: "தமிழ், தெலுங்கு, இந்தி, கன்னடம், மராத்தி, வங்காளி, குஜராத்தி மற்றும் பல.",
+    featSpeedTitle: "அதிவேக பதில்",
+    featSpeedDesc: "300 மில்லி விநாடிகளுக்குள் துல்லியமான குரல் மற்றும் உரை பதில்கள்.",
+    featDocsTitle: "ஆவண தகுதி சரிபார்ப்பு",
+    featDocsDesc: "உங்கள் ஆவணங்களை கொண்டு எந்த திட்டங்களுக்கு தகுதி என உடனே அறியுங்கள்.",
+    workspaceReady: "குடிமக்கள் தளம் தயார்",
+    welcomeCitizen: "வணக்கம்",
+    workspaceSubtitle: "உங்கள் தளம் தயாராக உள்ளது. அரசு திட்டங்களை கண்டறியுங்கள் அல்லது பேசுங்கள்.",
+    btnEnterWorkspace: "தளத்திற்கு செல்லுங்கள்",
+  },
+  mr: {
+    heroDescription: "प्रत्येक भारतीय नागरिकासाठी व्हॉइस-फर्स्ट बुद्धिमत्ता. आपल्या मातृभाषेत अधिकृत सरकारी योजना, शिष्यवृत्ती, आरोग्य सुरक्षा आणि शेतकरी मदतीची माहिती मिळवा.",
+    btnSignIn: "साइन इन",
+    btnCreateAccount: "खाते तयार करा",
+    btnGuestDemo: "🚀 झटपट गेस्ट डेमो (एका क्लिकवर)",
+    featuresHeading: "भारतव्हॉइस AI ची वैशिष्ट्ये",
+    featVoiceTitle: "व्हॉइस-आधारित संवाद",
+    featVoiceDesc: "आपल्या मातृभाषेत बोला — इंग्रजी किंवा टायपिंगची गरज नाही.",
+    featSchemesTitle: "सरकारी योजना",
+    featSchemesDesc: "पीएम किसान, आयुष्मान भारत, शिष्यवृत्ती आणि शासकीय योजनांची माहिती.",
+    featVerifiedTitle: "100% पडताळणीकृत माहिती" ,
+    featVerifiedDesc: "अधिकृत सरकारी पोर्टलवरून पडताळलेली विश्वासार्হ माहिती.",
+    featLanguagesTitle: "11 भारतीय भाषा",
+    featLanguagesDesc: "मराठी, हिंदी, तेलुगू, कन्नड, तमिळ, बंगाली, गुजराती आणि इतर.",
+    featSpeedTitle: "क्षणार्धात उत्तरे",
+    featSpeedDesc: "300ms पेक्षा कमी वेळेत अचूक आणि विश्वासार्হ उत्तर.",
+    featDocsTitle: "कागदपत्र पात्रता तपासणी",
+    featDocsDesc: "आपल्या कागदपत्रांच्या आधारे योजनांची पात्रता त्वरित तपासा.",
+    workspaceReady: "नागरिक कार्यक्षेत्र तयार आहे",
+    welcomeCitizen: "स्वागत आहे",
+    workspaceSubtitle: "आपले कार्यक्षेत्र सज्ज आहे. सरकारी सेवा शोधा किंवा व्हॉइस असिस्टंटशी बोला.",
+    btnEnterWorkspace: "कार्यक्षेत्रात प्रवेश करा",
+  },
+  bn: {
+    heroDescription: "প্রতিটি ভারতীয় নাগরিকের ক্ষমতায়নের জন্য ভয়েস-ফার্স্ট প্রযুক্তি। আপনার মাতৃভাষায় যাচাইকৃত সরকারি প্রকল্প, স্কলারশিপ, স্বাস্থ্য সুরক্ষা এবং কৃষক সহায়তা জানুন।",
+    btnSignIn: "সাইন ইন",
+    btnCreateAccount: "অ্যাকাউন্ট তৈরি করুন",
+    btnGuestDemo: "🚀 তাৎক্ষণিক গেস্ট ডেমো",
+    featuresHeading: "ভারতভয়েস AI-এর বৈশিষ্ট্যসমূহ",
+    featVoiceTitle: "ভয়েস-ফার্স্ট কথোপকথন",
+    featVoiceDesc: "নিজের মাতৃভাষায় কথা বলুন — কোনো ইংরেজি বা টাইপিং লাগবে না।",
+    featSchemesTitle: "সরকারি প্রকল্প",
+    featSchemesDesc: "পিএম কিষাণ, আয়ুষ্মান ভারত, স্কলারশিপ ও আবাস যোজনার বিবরণ।",
+    featVerifiedTitle: "১০০% যাচাইকৃত তথ্য",
+    featVerifiedDesc: "সরকারি পোর্টাল থেকে যাচাইকৃত নির্ভরযোগ্য তথ্য।",
+    featLanguagesTitle: "১১টি ভারতীয় ভাষা",
+    featLanguagesDesc: "বাংলা, হিন্দি, তেলেগু, কন্নড়, তামিল, মারাঠি, গুজরাটি ইত্যাদি।",
+    featSpeedTitle: "দ্রুততম উত্তর",
+    featSpeedDesc: "৩০০ মিলিসেকেন্ডের মধ্যে সঠিক ও স্পষ্ট প্রতিক্রিয়া।",
+    featDocsTitle: "নথি যাচাইকরণ",
+    featDocsDesc: "আপনার নথির ভিত্তিতে প্রকল্পের যোগ্যতা সঙ্গে সঙ্গে যাচাই করুন।",
+    workspaceReady: "নাগরিক ওয়ার্কস্পেস প্রস্তুত",
+    welcomeCitizen: "স্বাগতম",
+    workspaceSubtitle: "আপনার ওয়ার্কস্পেস প্রস্তুত। সরকারি প্রকল্প জানুন বা সহকারীর সাথে কথা বলুন।",
+    btnEnterWorkspace: "ওয়ার্কস্পেসে প্রবেশ করুন",
+  },
+  gu: {
+    heroDescription: "દરેક ભારતીય નાગરિક માટે વોઇસ-ફર્સ્ટ બુદ્ધિમત્તા. તમારી માતૃભાષામાં અધિકૃત સરકારી કલ્યાણ યોજનાઓ, સ્કોલરશિપ, આરોગ્ય અને ખેડૂત સહાય મેળવો.",
+    btnSignIn: "સાઇન ઇન",
+    btnCreateAccount: "ખાતું બનાવો",
+    btnGuestDemo: "🚀 ત્વરિત ગેસ્ટ ડેમો",
+    featuresHeading: "ભારતવોઇસ AI ની વિશેષતાઓ",
+    featVoiceTitle: "વોઇસ-ફર્સ્ટ વાતચીત",
+    featVoiceDesc: "તમારી માતૃભાષામાં બોલો — અંગ્રેજી કે ટાઇપિંગની જરૂર નથી.",
+    featSchemesTitle: "સરકારી યોજનાઓ",
+    featSchemesDesc: "પીએમ કિસાન, આયુષ્માન ભારત, સ્કોલરશિપ અને લોન યોજનાઓ.",
+    featVerifiedTitle: "100% ચકાસાયેલ માહિતી",
+    featVerifiedDesc: "સરકારી પોર્ટલ દ્વારા પ્રમાણિત વિશ્વસનીય માહિતી.",
+    featLanguagesTitle: "11 ભારતીય ભાષાઓ",
+    featLanguagesDesc: "ગુજરાતી, હિન્દી, તેલુગુ, કન્નડ, તમિલ, મરાઠી, બંગાળી વગેરે.",
+    featSpeedTitle: "ઝડપી પ્રતિસાદ",
+    featSpeedDesc: "300ms માં સચોટ અને સ્પષ્ટ ઉત્તર મેળવો.",
+    featDocsTitle: "દસ્તાવેજ પાત્રતા તપાસ",
+    featDocsDesc: "તમારા દસ્તાવેજોના આધારે યોજનાઓની પાત્રતા તુરંત જાણો.",
+    workspaceReady: "નાગરિક કાર્યક્ષેત્ર તૈયાર છે",
+    welcomeCitizen: "સ્વાગત છે",
+    workspaceSubtitle: "તમારું કાર્યક્ષેત્ર તૈયાર છે. સરકારી સેવાઓ શોધો અથવા વાત કરો.",
+    btnEnterWorkspace: "કાર્યક્ષેત્રમાં પ્રવેશ કરો",
+  },
+  ml: {
+    heroDescription: "ഓരോ ഇന്ത്യൻ പൗരനെയും ശാക്തീകരിക്കുന്ന വോയ്‌സ്-ഫസ്റ്റ് സാങ്കേതികവിദ്യ. നിങ്ങളുടെ മാതൃഭാഷയിൽ സർക്കാർ ക്ഷേമ പദ്ധതികൾ, സ്കോളർഷിപ്പുകൾ, ആരോഗ്യ പരിരക്ഷ എന്നിവ അറിയൂ.",
+    btnSignIn: "സൈൻ ഇൻ",
+    btnCreateAccount: "അക്കൗണ്ട് സൃഷ്ടിക്കുക",
+    btnGuestDemo: "🚀 തൽക്ഷണ ഡെമോ",
+    featuresHeading: "ഭാരത്‌വോയ്‌സ് AI സവിശേഷതകൾ",
+    featVoiceTitle: "ശബ്ദത്തിലൂടെ സംഭാഷണം",
+    featVoiceDesc: "മാതൃഭാഷയിൽ സംസാരിക്കുക — ഇംഗ്ലീഷോ ടൈപ്പിംഗോ ആവശ്യമില്ല.",
+    featSchemesTitle: "സർക്കാർ പദ്ധതികൾ",
+    featSchemesDesc: "പിഎം കിസാൻ, ആയുഷ്മാൻ ഭാരത്, സ്കോളർഷിപ്പ് വിവരങ്ങൾ.",
+    featVerifiedTitle: "100% പരിശോധിച്ച വിവരങ്ങൾ",
+    featVerifiedDesc: "ഔദ്യോഗിക സർക്കാർ രേഖകളാൽ സ്ഥിരീകരിച്ച കൃത്യമായ വിവരങ്ങൾ.",
+    featLanguagesTitle: "11 ഇന്ത്യൻ ഭാഷകൾ",
+    featLanguagesDesc: "മലയാളം, ഹിന്ദി, തെലുങ്ക്, കന്നഡ, തമിഴ്, മറാത്തി, ഗുജറാത്തി തുടങ്ങിയവ.",
+    featSpeedTitle: "അതിവേഗ മറുപടി",
+    featSpeedDesc: "300 മില്ലിസെക്കൻഡിനുള്ളിൽ കൃത്യമായ ശബ്ദ മറുപടി.",
+    featDocsTitle: "യോഗ്യതാ പരിശോധന",
+    featDocsDesc: "നിങ്ങളുടെ രേഖകൾ പരിശോധിച്ച് അർഹതയുള്ള പദ്ധതികൾ കണ്ടെത്തുക.",
+    workspaceReady: "വർക്ക്‌സ്‌പേസ് തയ്യാറാണ്",
+    welcomeCitizen: "സ്വാഗതം",
+    workspaceSubtitle: "നിങ്ങളുടെ വർക്ക്‌സ്‌പേസ് തയ്യാറാണ്. സർക്കാർ സേവനങ്ങൾ പരിശോധിക്കുക.",
+    btnEnterWorkspace: "പ്രവേശിക്കുക",
+  },
+  pa: {
+    heroDescription: "ਹਰ ਭਾਰਤੀ ਨਾਗਰਿਕ ਨੂੰ ਸ਼ਕਤੀਸ਼ਾਲੀ ਬਣਾਉਣ ਵਾਲੀ ਵੌਇਸ-ਫਸਟ ਆਰਟੀਫਿਸ਼ੀਅਲ ਇੰਟੈਲੀਜੈਂਸ। ਆਪਣੀ ਮਾਤ-ਭਾਸ਼ਾ ਵਿੱਚ ਸਰਕਾਰੀ ਭਲਾਈ ਸਕੀਮਾਂ, ਵਜ਼ੀਫ਼ੇ ਅਤੇ ਕਿਸਾਨ ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਕਰੋ।",
+    btnSignIn: "ਸਾਈਨ ਇਨ",
+    btnCreateAccount: "ਖਾਤਾ ਬਣਾਓ",
+    btnGuestDemo: "🚀 ਤੁਰੰਤ ਗੈਸਟ ਡੈਮੋ",
+    featuresHeading: "ਭਾਰਤਵੌਇਸ AI ਦੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+    featVoiceTitle: "ਆਵਾਜ਼ ਰਾਹੀਂ ਗੱਲਬਾਤ",
+    featVoiceDesc: "ਆਪਣੀ ਮਾਤ-ਭਾਸ਼ਾ ਵਿੱਚ ਬੋਲੋ — ਅੰਗਰੇਜ਼ੀ ਜਾਂ ਟਾਈਪਿੰਗ ਦੀ ਲੋੜ ਨਹੀਂ।",
+    featSchemesTitle: "ਸਰਕਾਰੀ ਸਕੀਮਾਂ",
+    featSchemesDesc: "ਪੀਐਮ ਕਿਸਾਨ, ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ, ਵਜ਼ੀਫ਼ੇ ਅਤੇ ਰਿਹਾਇਸ਼ੀ ਸਕੀਮਾਂ।",
+    featVerifiedTitle: "100% ਪ੍ਰਮਾਣਿਤ ਜਾਣਕਾਰੀ",
+    featVerifiedDesc: "ਅਧਿਕਾਰਤ ਸਰਕਾਰੀ ਪੋਰਟਲਾਂ ਤੋਂ ਪ੍ਰਮਾਣਿਤ ਸੱਚੀ ਜਾਣਕਾਰੀ।",
+    featLanguagesTitle: "11 ਭਾਰਤੀ ਭਾਸ਼ਾਵਾਂ",
+    featLanguagesDesc: "ਪੰਜਾਬੀ, ਹਿੰਦੀ, ਤੇਲਗੂ, ਕੰਨੜ, ਤਾਮਿਲ, ਮਰਾਠੀ, ਗੁਜਰਾਤੀ ਅਤੇ ਹੋਰ।",
+    featSpeedTitle: "ਤੁਰੰਤ ਜਵਾਬ",
+    featSpeedDesc: "300 ਮਿਲੀਸਕਿੰਟ ਤੋਂ ਵੀ ਘੱਟ ਸਮੇਂ ਵਿੱਚ ਸਹੀ ਜਵਾਬ।",
+    featDocsTitle: "ਯੋਗਤਾ ਜਾਂਚ",
+    featDocsDesc: "ਆਪਣੇ ਦਸਤਾਵੇਜ਼ਾਂ ਦੇ ਆਧਾਰ 'ਤੇ ਸਕੀਮਾਂ ਦੀ ਯੋਗਤਾ ਦੀ ਤੁਰੰਤ ਜਾਂਚ ਕਰੋ।",
+    workspaceReady: "ਵਰਕਸਪੇਸ ਤਿਆਰ ਹੈ",
+    welcomeCitizen: "ਜੀ ਆਇਆਂ ਨੂੰ",
+    workspaceSubtitle: "ਤੁਹਾਡਾ ਵਰਕਸਪੇਸ ਤਿਆਰ ਹੈ। ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਦੇਖੋ ਜਾਂ ਸਹਾਇਕ ਨਾਲ ਗੱਲ ਕਰੋ।",
+    btnEnterWorkspace: "ਵਰਕਸਪੇਸ ਵਿੱਚ ਜਾਓ",
+  },
+  or: {
+    heroDescription: "ପ୍ରତ୍ୟେକ ଭାରତୀୟ ନାଗରିକଙ୍କ ପାଇଁ ଭଏସ୍-ପ୍ରଥମ ଟେକ୍ନୋଲୋଜି। ନିଜ ମାତୃଭାଷାରେ ସରକାରୀ କଲ୍ୟାଣକାରୀ ଯୋଜନା, ସ୍କଲାରସିପ୍ ଏବଂ କୃଷକ ସହାୟତା ପାଆନ୍ତୁ।",
+    btnSignIn: "ସାଇନ୍ ଇନ୍",
+    btnCreateAccount: "ଖାତା ଖୋଲନ୍ତୁ",
+    btnGuestDemo: "🚀 ତୁରନ୍ତ ଡେମୋ",
+    featuresHeading: "ଭାରତଭଏସ୍ AI ର ମୁଖ୍ୟ ବିଶେଷତା",
+    featVoiceTitle: "ଭଏସ୍ ସଂଳାପ",
+    featVoiceDesc: "ନିଜ ଭାଷାରେ କୁହନ୍ତୁ — ଇଂରାଜୀ ବା ଟାଇପ୍ କରିବା ଆବଶ୍ୟକ ନାହିଁ।",
+    featSchemesTitle: "ସରକାରୀ ଯୋଜନା",
+    featSchemesDesc: "ପିଏମ୍ କିଷାନ୍, ଆୟୁଷ୍ମାନ ଭାରତ ଏବଂ ଛାତ୍ରବୃତ୍ତି ସୂଚନା।",
+    featVerifiedTitle: "୧୦୦% ପ୍ରମାଣିତ ତଥ୍ୟ",
+    featVerifiedDesc: "ସରକାରୀ ପୋର୍ଟାଲରୁ ଯାଞ୍ଚ ହୋଇଥିବା ପ୍ରାମାଣିକ ସୂଚନା।",
+    featLanguagesTitle: "୧୧ଟି ଭାରତୀୟ ଭାଷା",
+    featLanguagesDesc: "ଓଡ଼ିଆ, ହିନ୍ଦୀ, ତେଲୁଗୁ, କନ୍ନଡ, ତାମିଲ, ମରାଠୀ, ବଙ୍ଗାଳୀ ଇତ୍ୟାଦି।",
+    featSpeedTitle: "ଦ୍ରୁତ ଉତ୍ତର",
+    featSpeedDesc: "୩୦୦ ମିଲିସେକେଣ୍ଡ ମଧ୍ୟରେ ସଠିକ୍ ଓ ସ୍ପଷ୍ଟ ଉତ୍ତର।",
+    featDocsTitle: "ଯୋଗ୍ୟତା ପରୀକ୍ଷଣ",
+    featDocsDesc: "ଆପଣଙ୍କ କାଗଜପତ୍ର ଆଧାରରେ ଯୋଜନାର ଯୋଗ୍ୟତା ଯାଞ୍ଚ କରନ୍ତୁ।",
+    workspaceReady: "ନାଗରିକ କାର୍ଯ୍ୟକ୍ଷେତ୍ର ପ୍ରସ୍ତୁତ",
+    welcomeCitizen: "ସ୍ୱାଗତ",
+    workspaceSubtitle: "ଆପଣଙ୍କ କାର୍ଯ୍ୟକ୍ଷେତ୍ର ପ୍ରସ୍ତୁତ। ସରକାରୀ ସେବା ଦେଖନ୍ତୁ ବା କଥା ହୁଅନ୍ତୁ।",
+    btnEnterWorkspace: "କାର୍ଯ୍ୟକ୍ଷେତ୍ରକୁ ଯାଆନ୍ତୁ",
+  },
+};
+
 export function getSiteTranslation(lang: Language): SiteTranslation {
-  return SITE_DICTIONARY[lang] || SITE_DICTIONARY.en;
+  const base = SITE_DICTIONARY[lang] || SITE_DICTIONARY.en;
+  const launch = LAUNCH_PAGE_TRANSLATIONS[lang] || LAUNCH_PAGE_TRANSLATIONS.en;
+  return { ...base, ...launch };
 }
