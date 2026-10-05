@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
 import BrandLogo from "@/components/BrandLogo";
-import LanguageSelector from "@/components/LanguageSelector";
 import { fetchConversations } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/useLanguage";
@@ -14,7 +13,7 @@ type DashboardTab = "overview" | "voice" | "schemes" | "history";
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
   const [conversations, setConversations] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
   const [speakingQuery, setSpeakingQuery] = useState<string | null>(null);
@@ -83,9 +82,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen bg-transparent relative overflow-hidden text-bone">
-      <div className="relative z-10">
-        <Sidebar />
-      </div>
+      <Sidebar />
       
       <main className="flex-1 px-3 sm:px-8 py-4 sm:py-6 max-w-6xl mx-auto relative z-10 min-h-screen overflow-y-auto">
         
@@ -107,11 +104,6 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {/* Embedded Language Selector */}
-            <div className="glass px-1 py-0.5 rounded-full border border-white/10 shadow-inner-light">
-              <LanguageSelector value={language} onChange={setLanguage} compact />
-            </div>
-
             <Link
               href="/"
               className="flex items-center gap-1 px-3 py-1.5 rounded-full glass border border-white/15 text-xs font-semibold text-bone hover:border-saffron/40 hover:bg-white/5 active:scale-95 transition-all shadow-sm"

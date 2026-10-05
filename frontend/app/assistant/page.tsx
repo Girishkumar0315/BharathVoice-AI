@@ -58,9 +58,8 @@ function AssistantContent() {
         <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-saffron/10 rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10">
-        <Sidebar />
-      </div>
+      {/* Sidebar — direct flex child so it doesn't overlap main content */}
+      <Sidebar />
 
       <div className="flex-1 grid lg:grid-cols-[1fr_320px] min-h-screen relative z-10">
         <main className="px-3 sm:px-6 py-4 sm:py-6 flex flex-col min-h-screen relative">
